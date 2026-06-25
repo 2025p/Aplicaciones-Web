@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ala Moda Express - Sistema de Compras Online</title>
+    <title>Ala Moda Express</title>
+
+    <link rel="icon" type="image/x-icon" href="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+
     <style>
         :root {
             --color-principal: #2c3e50;
@@ -20,7 +24,7 @@
             color: #333;
         }
 
-        /* Estilos del Hero (Inicio) */
+        
         .hero-section {
             background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
             color: white;
@@ -28,7 +32,7 @@
             text-align: center;
         }
 
-        /* Transiciones para tarjetas */
+        
         .custom-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: none;
@@ -43,14 +47,14 @@
             border-bottom: 3px solid var(--color-acento);
         }
 
-        /* Estilos de Aside */
+        
         .promo-aside {
             background-color: var(--color-principal);
             color: white;
             border-radius: 10px;
         }
 
-        /* Media Query para pantallas pequeñas */
+        
         @media (max-width: 768px) {
             .hero-section {
                 padding: 60px 15px;
@@ -68,21 +72,18 @@
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
             <div class="container">
-                <a class="navbar-brand fw-bold" href="#">Ala Moda Express</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#quienes-somos">Quiénes Somos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#productos">Productos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-                    </ul>
+                <a class="navbar-brand d-flex align-items-center fw-bold text-uppercase tracking-wider" href="#">
+                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
+                         alt="Logo" 
+                         class="rounded-circle me-2" 
+                         style="width: 35px; height: 35px; object-fit: cover;">
+            
+                    <span>Ala Moda Express</span>
+                </a>
+        
                 </div>
-            </div>
         </nav>
     </header>
 
@@ -96,18 +97,24 @@
             </div>
         </section>
 
-        <section id="quienes-somos" class="container p-3 m-3 mx-auto mt-5">
-            <div class="row align-items-center">
-                <div class="col-md-6 mb-4">
+      <section id="quienes-somos" class="container py-5 mt-4">
+            <div class="row text-center mb-4justify-content-center">
+                <!-- Limitamos el ancho a col-lg-8 para que las líneas de texto no sean tan largas -->
+                <div class="col-12 col-lg-8 mx-auto">
                     <h2 class="fw-bold mb-4 text-uppercase">Quiénes Somos</h2>
-                    <article>
-                        <p>Somos una Empresa de vestir innovadora al último estilo de la moda con las mejores marcas y calidad, brindando la confianza y mejor servicio a nuestros clientes. Nuestra convicción es mantener siempre un estilo único que nos diferencie de los demás.</p>
+                    <article class="text-muted" style="text-align: justify; text-justify: inter-word;">
+                        <p class="mb-3">Somos una Empresa de vestir innovadora al último estilo de la moda con las mejores marcas y calidad, brindando la confianza y mejor servicio a nuestros clientes. Nuestra convicción es mantener siempre un estilo único que nos diferencie de los demás.</p>
                         <p>Nuestros valores están siempre dentro de la calidad del producto. Trabajamos con las telas más finas y elegantes del mercado, algodón 100% orgánico y poliéster que te dan un mejor confort y durabilidad.</p>
                     </article>
                 </div>
-                <div class="col-md-6 text-center">
-                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Nuestra Tienda Online de Outfits" class="img-fluid rounded shadow">
-                    <h3 class="mt-3 text-muted">Moda y Estilo</h3>
+            </div>
+            
+            <div class="row g-4 justify-content-center mt-2">
+                <div class="col-6 col-md-4 text-center">
+                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Nuestra Tienda Online de Outfits" class="img-fluid rounded shadow-sm">
+                </div>
+                <div class="col-6 col-md-4 text-center">
+                    <img src="{{ url_for('static', filename='moda.jpg') }}" alt="Moda y Estilo" class="img-fluid rounded shadow-sm">
                 </div>
             </div>
         </section>
@@ -184,56 +191,148 @@
             </div>
         </section>
 
-        <section id="contacto" class="container p-3 my-5">
-            <div class="row">
-                <div class="col-lg-6 mb-4">
-                    <h2 class="fw-bold mb-4">Contáctanos</h2>
-                    <form class="bg-white p-4 border rounded shadow-sm">
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre completo</label>
-                            <input type="text" class="form-control" id="nombre" placeholder="Tu nombre" required>
+        <section id="gestion-inventario" class="py-5">
+            <div class="container">
+                <h2 class="fw-bold text-center mb-5 text-uppercase">Administración de Stock de Outfits</h2>
+                <div class="row">
+                    <div class="col-md-5 mb-4">
+                        <div class="card p-4 shadow-sm border-0">
+                            <h4 class="mb-3 text-center fw-bold text-secondary">Registrar Prenda</h4>
+                            <div id="mensaje-validacion"></div>
+                            
+                            <form id="form-producto">
+                                <div class="mb-3">
+                                    <label for="prod-nombre" class="form-label fw-bold">Nombre de la Prenda/Outfit</label>
+                                    <input type="text" class="form-control" id="prod-nombre" placeholder="Ej. Chaqueta Denim Premium">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="prod-descripcion" class="form-label fw-bold">Descripción Corta</label>
+                                    <textarea class="form-control" id="prod-descripcion" rows="2" placeholder="Ej. 100% algodón, botones reforzados"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="prod-categoria" class="form-label fw-bold">Categoría</label>
+                                    <select class="form-select" id="prod-categoria">
+                                        <option value="">Seleccione una tipo...</option>
+                                        <option value="Damas">Damas</option>
+                                        <option value="Caballeros">Caballeros</option>
+                                        <option value="Urban">Urban Estilo</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-danger w-100 fw-bold shadow-sm" style="background-color: var(--color-acento);">Agregar al Catálogo</button>
+                            </form>
                         </div>
-                        <div class="mb-3">
-                            <label for="correo" class="form-label">Correo electrónico</label>
-                            <input type="email" class="form-control" id="correo" placeholder="correo@ejemplo.com" required>
+                    </div>
+
+                  
+                    <div class="col-md-7">
+                        <!-- Usamos row y columnas internas para separar perfectamente el texto del contador -->
+                        <div class="row align-items-center mb-4 bg-dark p-3 rounded text-white shadow-sm g-2 mx-0">
+                            <div class="col-12 col-sm-8 text-center text-sm-start">
+                                <h6 class="mb-0 fw-bold text-uppercase" style="letter-spacing: 0.5px;">Prendas Ingresadas Temporalmente</h6>
+                            </div>
+                            <div class="col-12 col-sm-4 text-center text-sm-end">
+                                <span class="badge bg-danger fs-6 px-3 py-2 w-100 w-sm-auto">Total: <span id="total-registros">0</span></span>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="asunto" class="form-label">Asunto</label>
-                            <input type="text" class="form-control" id="asunto" placeholder="Motivo de tu consulta" required>
+                        
+                        <div id="lista-productos" class="row g-3"></div>
+                    </div>
+            
+        </section>
+
+       <section id="contacto" class="container py-5 my-5">
+            <h2 class="fw-bold mb-5 text-center text-uppercase">Contáctanos</h2>
+            
+            <div class="row g-4 align-items-stretch">
+                
+                <div class="col-12 col-md-6 col-lg-4">
+                    <form id="form-contacto" class="bg-white p-4 border rounded shadow-sm h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="fw-bold mb-3 text-dark">Escríbenos</h5>
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label small fw-semibold text-muted">Nombre completo</label>
+                                <input type="text" class="form-control" id="nombre" placeholder="Tu nombre" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="correo" class="form-label small fw-semibold text-muted">Correo electrónico</label>
+                                <input type="email" class="form-control" id="correo" placeholder="correo@ejemplo.com" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="asunto" class="form-label small fw-semibold text-muted">Asunto</label>
+                                <input type="text" class="form-control" id="asunto" placeholder="Motivo de tu consulta" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="mensaje" class="form-label small fw-semibold text-muted">Mensaje</label>
+                                <textarea class="form-control" id="mensaje" rows="3" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="mensaje" class="form-label">Mensaje</label>
-                            <textarea class="form-control" id="mensaje" rows="4" placeholder="Escribe tu mensaje aquí..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-dark w-100">Enviar Mensaje</button>
+                        <button type="submit" class="btn btn-dark w-100 fw-bold mt-2">Enviar Mensaje</button>
                     </form>
                 </div>
 
-                <div class="col-lg-6">
-                    <div class="p-4 bg-light rounded shadow-sm h-100">
-                        <h4 class="fw-bold mb-3">Información Directa</h4>
-                        <ul class="list-unstyled">
-                            <li class="mb-2">📍 <strong>Dirección:</strong> Pelileo Av. El Tambo, edificio Bull´s - Ecuador</li>
-                            <li class="mb-2">📞 <strong>Teléfono:</strong> +593 99 6353 959</li>
-                            <li class="mb-2">✉️ <strong>Correo:</strong> <a href="mailto:info@alamodaexpress.com" class="text-decoration-none">info@alamodaexpress.com</a></li>
-                        </ul>
-                        
-                        <div class="mt-4 mb-4">
-                            <strong>Síguenos:</strong>
-                            <a href="https://facebook.com" target="_blank" class="btn btn-outline-primary btn-sm mx-1">Facebook</a>
-                            <a href="https://instagram.com" target="_blank" class="btn btn-outline-danger btn-sm mx-1">Instagram</a>
-                            <a href="https://tiktok.com" target="_blank" class="btn btn-outline-dark btn-sm mx-1">TikTok</a>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="bg-light p-4 border rounded shadow-sm h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="fw-bold mb-4 text-dark">Información Directa</h5>
+                            
+                            <div class="d-flex align-items-start mb-3">
+                                <span class="text-danger me-3"><i class="bi bi-geo-alt-fill fs-5"></i></span>
+                                <div>
+                                    <strong class="d-block small text-muted">Dirección:</strong>
+                                    <span class="small">Pelileo Av. El Tambo, edificio Bull's - Ecuador</span>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-start mb-3">
+                                <span class="text-danger me-3"><i class="bi bi-telephone-fill fs-5"></i></span>
+                                <div>
+                                    <strong class="d-block small text-muted">Teléfono:</strong>
+                                    <span class="small">+593 99 8353 959</span>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-start mb-4">
+                                <span class="text-danger me-3"><i class="bi bi-envelope-fill fs-5"></i></span>
+                                <div>
+                                    <strong class="d-block small text-muted">Correo:</strong>
+                                    <a href="mailto:info@alamodaexpress.com" class="small text-decoration-none text-dark">info@alamodaexpress.com</a>
+                                </div>
+                            </div>
                         </div>
 
-                        <h5 class="fw-bold">Conoce más sobre nosotros</h5>
-                        <div class="video-container mt-2">
-                            <video class="w-100 rounded" controls>
-                                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                                Tu navegador no soporta el elemento de video.
-                            </video>
+                        <div>
+                            <h6 class="fw-bold small text-uppercase text-muted mb-3" style="letter-spacing: 0.5px;">Síguenos en:</h6>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-outline-primary btn-sm flex-fill fw-semibold">Facebook</a>
+                                <a href="#" class="btn btn-outline-danger btn-sm flex-fill fw-semibold">Instagram</a>
+                                <a href="#" class="btn btn-outline-dark btn-sm flex-fill fw-semibold">TikTok</a>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="col-12 col-lg-4">
+                    <div class="bg-white p-4 border rounded shadow-sm h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="fw-bold mb-3 text-dark">Conoce más de nosotros</h5>
+                            
+                            <div class="mb-3">
+                                <video class="w-100 rounded border shadow-sm" controls style="max-height: 140px; object-fit: cover;">
+                                    <source src="{{ url_for('static', filename='video.mp4') }}" type="video/mp4">
+                                    Tu navegador no soporta videos.
+                                </video>
+                            </div>
+                            
+                            <div>
+                                <video class="w-100 rounded border shadow-sm" controls style="max-height: 140px; object-fit: cover;">
+                                    <source src="{{ url_for('static', filename='video.mp4') }}" type="video/mp4">
+                                    Tu navegador no soporta videos.
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -261,91 +360,9 @@
             <p class="mb-1">© 2026 - Desarrollado por Wilson Roberto Cerna Tello & Michelle Estefania Casquete Guayllas</p>
             <p class="mb-0 text-muted small">Asignatura: Desarrollo Web | Año: 2026</p>
         </div>
-    </footer>
+    </footer >
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-        
-        <section id="inicio">
-            <h2>¡Todo tu negocio, a un clic!</h2>
-            <p>Es tu momento de emprender o hacer crecer tu negocio, nuestra consigna que tengas un margen del 30% de ganancias con nuestra variedad de prendas de vestir a la moda  obtén tu pedido de forma rápida y segura de donde te encuentres sin tener que salir a buscar, estamos gustosos de atenderte. <strong> ¡ Pide Ya ! </srong>  </p>
-        </section>
-
-        <hr>
-
-        
-        <section id="quienes-somos">
-            <h2>Quiénes Somos</h2>
-            <article>
-                <p>
-                   Somos una Empresa de vestir innovadora al último estilo de la moda con las mejores marcas y calidad, brindando la confianza y mejor servicio en nuestros clientes. Nuestra convicción es mantener siempre un estilo único que nos diferencie de los demás, manteniendo siempre un enfoque innovador. 
-                </p>
-                <p>
-                    Nuestros valores están siempre dentro de la calidad de producto, trabajamos con tela de la más fina elegante del mercado, algodón 100% orgánico y poliéster que te dan un mejor confort y durabilidad. El propósito es ofrecer prendas que no solo te hagan sentir bien , sino que también cuiden tu piel para que te sientas seguro , cómodo y satisfecho.
-                </p>
-                <h3> Moda y Estilo </h3>
-                <img src="{{ url_for('static', filename='moda.jpg') }}" alt="Nuestra Tienda Online de Outfits" width="300">
-            </article>
-        </section>
-
-        <hr>
-
-        
-        <section id="productos">
-            <h2>Nuestros Productos y Servicios</h2>
-            <ul>
-                <li><strong>Pantalones Premiun:</strong> Prenda de vestir premium con corte moderno y materiales de alta calidad.</li>
-                <li><strong>Pantalones Capri:</strong> Prenda de dama elegante con varios diseños y de buena calidad.</li>
-                <li><strong>Pantalones AA:</strong> Pantalones con diseños urbanos para damas y caballeros.</li>
-                <li><strong>Camisas Polo:</strong> Camisas clasicas para damas y caballeros que nunca pierdas tu estilo.</li>
-                <li><strong>Blusa de Verano:</strong> Modernas y comodas para cualquier ocasion.</li>
-                <li><strong>Blusa con Estampado:</strong> Varios diseños disponibles en toda tallas para elegir.</li>
-                <li><strong>Servicio de Servientrga Express: </strong> Entrega a domicilio rápida que garantiza que tu paquete llegue en su punto óptimo.</li>
-                <li><strong>Pedidos Online 24/7:</strong> Gestiona y tus pedidos a cualquier hora a través de nuestra plataforma web.</li>
-            </ul>
-        </section>
-
-        <hr>
-
-        
-        <section id="contacto">
-            <h2>Contacto</h2>
-            <p><strong>Dirección:</strong> <em>Pelileo Av. El Tambo Principal de la Ciudad, edificio Bull´s - Ecuador</em></p>
-            <p><strong>Teléfono:</strong> +593 99 6353 959</p>
-            <p><strong>Correo electrónico:</strong> <a href="mail:info@alamodaexpress.com">info@alamodaexpress.com</a></p>
-            
-            <p><strong>Síguenos en nuestras redes sociales:</strong></p>
-            <p>
-                <a href="https://facebook.com" target="_blank">Facebook</a> | 
-                <a href="https://instagram.com" target="_blank">Instagram</a> | 
-                <a href="https://tiktok.com" target="_blank">TikTok</a>
-            </p>
-
-            <h3>Conoce más sobre nuestra actividad</h3>
-            
-            <video width="560" height="315" controls>
-               <source src="{{ url_for('static', filename='video.mp4') }}" type="video/mp4">
-            </video>
-        </section>
-
-    </main>
-
-    
-    <aside>
-        <h3>Promociones y Horarios</h3>
-        <p><strong> ¡Promoción de la Semana!:</strong> Todos los jueves por la compra de cada docena, te lleva una prenda adicional tatalmente gratis.</p>
-        <p><strong> Horarios de Atención en Nuestra Tienda Fisica:</strong></p>
-        <ul>
-            <li>Lunes a Jueves: 08:00 - 20:00</li>
-            <li>Viernes a Domingo: 08:00 - 21:00</li>
-        </ul>
-    </aside>
-
-    <footer>
-        <p>© 2026 - Desarrollado por Wilson Roberto Cerna Tello & Michelle Estefania Casquete Guayllas</p>
-        <p>Asignatura: Desarrollo Web | Año: 2026</p>
-    </footer>
-
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
