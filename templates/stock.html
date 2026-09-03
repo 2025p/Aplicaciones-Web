@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Administración de Stock - Ala Moda Express{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-dark text-white fw-bold">
+                    <i class="bi bi-box-seam me-2"></i>Administración de Stock de Prendas
+                </div>
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Registrar Prenda</h5>
+                    <form id="form-stock">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Seleccionar Prenda/Modelos</label>
+                            <select class="form-select" id="stock-prenda" required>
+                                <option value="" selected disabled>Seleccione una prenda...</option>
+                                <option value="Pantalones Premium">Pantalones Premium</option>
+                                <option value="Pantalones Capri">Pantalones Capri</option>
+                                <option value="Camisas Polo">Camisas Polo</option>
+                                <option value="Blusas Estampadas">Blusas Estampadas</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Cantidad (Docenas)</label>
+                            <select class="form-select" id="stock-cantidad" required>
+                                <option value="" selected disabled>Seleccione cantidad...</option>
+                                <option value="1 Docena">1 Docena</option>
+                                <option value="2 Docenas">2 Docenas</option>
+                                <option value="5 Docenas">5 Docenas</option>
+                                <option value="10 Docenas">10 Docenas</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Categoría</label>
+                            <select class="form-select" id="stock-categoria" required>
+                                <option value="" selected disabled>Seleccione un tipo...</option>
+                                <option value="Caballero">Caballero</option>
+                                <option value="Dama">Dama</option>
+                                <option value="Niños">Niños</option>
+                            </select>
+                        </div>
+
+                        <!-- Mensajes de Estado -->
+                        <div id="msg-error-stock" class="alert alert-danger d-none py-2 small mb-3" role="alert">
+                            ⚠️ Debe completar todos los campos obligatorios antes de agregar al stock.
+                        </div>
+                        <div id="msg-exito-stock" class="alert alert-success d-none align-items-center mb-3 py-2 small" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            <div><strong>¡Producto Añadido Exitosamente al Stock!</strong></div>
+                        </div>
+
+                        <button type="button" class="btn btn-danger fw-bold w-100 mb-3" onclick="agregarAlStock()">Agregar al Catálogo</button>
+                    </form>
+
+                    <p class="fw-bold mb-2">¿Qué deseas hacer a continuación?</p>
+                    <div class="d-flex gap-2 mb-4">
+                        <button type="button" class="btn btn-outline-secondary btn-sm fw-bold" onclick="limpiarFormularioStock()">Seguir agregando</button>
+                        <button type="button" class="btn btn-dark btn-sm fw-bold" onclick="alert('Registro de stock finalizado.')">Cerrar compra</button>
+                    </div>
+
+                    <hr>
+
+                    <h6 class="fw-bold mb-3">Prendas Ingresadas</h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped align-middle text-center small">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Prenda</th>
+                                    <th>Cantidad</th>
+                                    <th>Categoría</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-stock-body">
+                                <tr id="fila-vacia">
+                                    <td colspan="4" class="text-muted py-3">No hay prendas ingresadas aún.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="fw-bold text-end text-muted">Total: <span id="total-stock">0</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let totalIngresados = 0;
+
+function agregarAlStock() {
+    const prenda = document.getElementById('stock-prenda').value;
+    const cantidad = document.getElementById('stock-cantidad').value;
+    const categoria = document.getElementById('stock-categoria').value;
+    const msgError = document.getElementById('msg-error-stock');
+    const msgExito = document.getElementById('msg-exito-stock');
+
+    // Validar campos vacíos
+    if (!prenda || !cantidad || !categoria) {
+        msgError.classList.remove('d-none');
+        msgExito.classList.add('d-none');
+        return;
+    }
+
+    // Ocultar error y mostrar éxito
+    msgError.classList.add('d-none');
+    msgExito.classList.remove('d-none');
+    msgExito.classList.add('d-flex');
+
+    // Quitar mensaje de tabla vacía
+    const filaVacia = document.getElementById('fila-vacia');
+    if (filaVacia) filaVacia.remove();
+
+    // Insertar en la tabla
+    const tabla = document.getElementById('tabla-stock-body');
+    const nuevaFila = document.createElement('tr');
+    nuevaFila.innerHTML = `
+        <td>${prenda}</td>
+        <td>${cantidad}</td>
+        <td><span class="badge bg-info text-dark">${categoria}</span></td>
+        <td><button class="btn btn-outline-danger btn-sm py-0" onclick="eliminarFilaStock(this)">Eliminar</button></td>
+    `;
+    tabla.appendChild(nuevaFila);
+
+    // Actualizar Total
+    totalIngresados++;
+    document.getElementById('total-stock').innerText = totalIngresados;
+}
+
+function limpiarFormularioStock() {
+    document.getElementById('stock-prenda').value = "";
+    document.getElementById('stock-cantidad').value = "";
+    document.getElementById('stock-categoria').value = "";
+    document.getElementById('msg-error-stock').classList.add('d-none');
+    document.getElementById('msg-exito-stock').classList.add('d-none');
+}
+
+function eliminarFilaStock(btn) {
+    btn.closest('tr').remove();
+    totalIngresados--;
+    document.getElementById('total-stock').innerText = totalIngresados;
+    
+    const tabla = document.getElementById('tabla-stock-body');
+    if (tabla.children.length === 0) {
+        tabla.innerHTML = `<tr id="fila-vacia"><td colspan="4" class="text-muted py-3">No hay prendas ingresadas aún.</td></tr>`;
+    }
+}
+</script>
+{% endblock %}

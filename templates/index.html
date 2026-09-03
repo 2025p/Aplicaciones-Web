@@ -1,459 +1,119 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ala Moda Express</title>
+{% extends "base.html" %}
 
-    <link rel="icon" type="image/x-icon" href="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80">
+{% block content %}
+<div class="row g-4">
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <!-- COLUMNA IZQUIERDA: MENÚ DE INFORMACIÓN (Ancho 3) -->
+    <aside class="col-12 col-md-3">
+        <div class="card p-3 shadow-sm border-0 bg-white">
+            <h5 class="fw-bold text-uppercase border-bottom pb-2 mb-3" style="font-size: 0.9rem; letter-spacing: 0.5px;">Información</h5>
+            <ul class="nav flex-column gap-2" style="font-size: 0.9rem;">
+                <li class="nav-item">
+                    <a class="nav-link text-muted p-0 d-flex align-items-center" href="#quienes-somos">
+                        <i class="bi bi-chevron-right me-1 small"></i> Informacion Corporativa
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted p-0 d-flex align-items-center" href="{{ url_for('catalogo') }}">
+                        <i class="bi bi-chevron-right me-1 small"></i> Colecciones
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted p-0 d-flex align-items-center" href="{{ url_for('productos') }}">
+                        <i class="bi bi-chevron-right me-1 small"></i> Productos y Servicios
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted p-0 d-flex align-items-center" href="{{ url_for('productos') }}">
+                        <i class="bi bi-chevron-right me-1 small"></i> Servicio al Cliente
+                    </a>
+                </li>
+                <li class="nav-item mt-2 pt-2 border-top">
+                    <a class="nav-link text-danger fw-bold p-0 d-flex align-items-center" href="{{ url_for('stock') }}">
+                        <i class="bi bi-gear-fill me-1"></i> Admin Stock Prendas
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
 
-    <style>
-        :root {
-            --color-principal: #2c3e50;
-            --color-acento: #e74c3c;
-            --color-fondo: #f4f6f9; /* <--- Cambia esta línea 18 con este nuevo color */
-        }
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--color-fondo)!important;
-            color: #333;
-        }
+    <!-- COLUMNA DERECHA: BANNER Y CONTENIDO (Ancho 9) -->
+    <div class="col-12 col-md-9">
         
-        .hero-section {
-            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
-            color: white;
-            padding: 100px 20px;
-            text-align: center;
-        }
-
-        
-        .custom-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: none;
-            border-radius: 10px;
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        .custom-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-            border-bottom: 3px solid var(--color-acento);
-        }
-
-        
-        .promo-aside {
-            background-color: var(--color-principal);
-            color: white;
-            border-radius: 10px;
-        }
-
-        
-        @media (max-width: 768px) {
-            .hero-section {
-                padding: 60px 15px;
-            }
-            .hero-section h2 {
-                font-size: 2rem;
-            }
-            .video-container video {
-                width: 100%;
-                height: auto;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
-            <div class="container">
-                <a class="navbar-brand d-flex align-items-center fw-bold text-uppercase tracking-wider" href="#">
-                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-                         alt="Logo" 
-                         class="rounded-circle me-2" 
-                         style="width: 35px; height: 35px; object-fit: cover;">
-            
-                    <span>Ala Moda Express</span>
-                </a>
-        
-                </div>
-        </nav>
-    </header>
-
-    <main>
-        <section id="inicio" class="hero-section">
-            <div class="container">
-                <h1 class="display-4 fw-bold">SISTEMA DE COMPRAS ONLINE DE OUTFITS</h1>
-                <h2 class="h3 mb-4">¡Todo tu negocio, a un clic!</h2>
-                <p class="lead max-w-75 mx-auto">Es tu momento de emprender o hacer crecer tu negocio. Obtén tu pedido de forma rápida y segura desde donde te encuentres sin tener que salir a buscar. Estamos gustosos de atenderte.</p>
-                <a href="#productos" class="btn btn-danger btn-lg mt-3 fw-bold px-5">¡Pide Ya!</a>
+        <!-- Banner de Inicio (Hero Section) -->
+        <section id="inicio" class="hero-section rounded shadow-sm mb-4">
+            <div class="container py-3">
+                <h1 class="display-5 fw-bold text-uppercase">Sistema de Compras Online de Outfits</h1>
+                <h2 class="h4 mb-4 fw-light">¡Tu estilo, a un clic!</h2>
+                <p class="lead fs-6 max-w-75 mx-auto opacity-90">Vístete con moda y elegancia. Diseñamos prendas de fina calidad, pensadas en tu salud, confort y estilo único. ¡La variedad es nuestra mejor presentación! Un gusto poder atenderte.</p>
+                <a href="{{ url_for('productos') }}" class="btn btn-danger btn-lg mt-2 fw-bold px-4 fs-6">¡Te esperamos!</a>
             </div>
         </section>
 
-      <section id="quienes-somos" class="container py-5 mt-4">
-            <div class="container my-5 text-center">
-                <h2 class="fw-bold mb-4 text-uppercase text-dark" style="letter-spacing: 1px;">Quiénes Somos</h2>
-                
-                <div class="row justify-content-center">
-                    <div class="col-12 col-md-10 col-lg-10">
-                        <p class="fs-5 text-secondary mb-3" style="line-height: 1.7; text-align: justify;">
-                            Somos una Empresa de vestir innovadora al último estilo de la moda con las mejores marcas y calidad, brindando la confianza y mejor servicio a nuestros clientes. Nuestra convicción es mantener siempre un estilo único que nos diferencie de los demás.
-                        </p>
-                        <p class="fs-5 text-secondary" style="line-height: 1.7; text-align: justify;">
-                            Nuestros valores están siempre dentro de la calidad del producto. Trabajamos con las telas más finas y elegantes del mercado, algodón 100% orgánico y poliéster que te dan un mejor confort y durabilidad.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="row text-center mt-5 mb-3">
-            <div class="col-12">
-                <h2 class="fw-bold" style="color: #2c3e50;">Moda y Estilo</h2>
-            </div>
-        </div>
-
-        <div class="row g-4 justify-content-center mt-2">
-            <div class="col-6 col-md-4 text-center">
-                <img src="{{ url_for('static', filename='Caballero.jpg') }}" alt="Moda y Estilo" class="img-fluid rounded shadow-sm" style="max-height: 450px; width: 100%; object-fit: cover; object-position: top;">
-            </div>
-            <div class="col-6 col-md-4 text-center">
-                <img src="{{ url_for('static', filename='moda.jpg') }}" alt="Moda y Estilo" class="img-fluid rounded shadow-sm" style="max-height: 450px; width: 100%; object-fit: cover;">
-            </div>
-        </div>
-        </section>
-
-        <section id="productos" class="bg-light py-5">
-           <div class="container my-5">
-                <h2 class="text-center fw-bold mb-4">NUESTROS PRODUCTOS Y SERVICIOS</h2>
-                <p class="text-center text-muted small mb-4">(Haz clic en cualquier prenda para ver fotos del catálogo)</p>
-                
-                <div class="row g-4 justify-content-center">
-                    <div class="col-12 col-md-4 col-lg-3">
-                        <div class="card h-100 p-4 shadow-sm text-center border-0 rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalPantalonesPremium" style="cursor: pointer;">
-                            <h5 class="fw-bold text-dark">Pantalones Premium</h5>
-                            <p class="text-muted small mb-0">Prenda de vestir con corte moderno y materiales de alta calidad.</p>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-4 col-lg-3">
-                        <div class="card h-100 p-4 shadow-sm text-center border-0 rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalPantalonesCapri" style="cursor: pointer;">
-                            <h5 class="fw-bold text-dark">Pantalones Capri</h5>
-                            <p class="text-muted small mb-0">Prenda de dama elegante con varios diseños y de buena calidad.</p>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-4 col-lg-3">
-                        <div class="card h-100 p-4 shadow-sm text-center border-0 rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalPantalonesAA" style="cursor: pointer;">
-                            <h5 class="fw-bold text-dark">Pantalones AA</h5>
-                            <p class="text-muted small mb-0">Pantalones con diseños urbanos para damas y caballeros.</p>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-4 col-lg-3">
-                        <div class="card h-100 p-4 shadow-sm text-center border-0 rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalCamisasPolo" style="cursor: pointer;">
-                            <h5 class="fw-bold text-dark">Camisas Polo</h5>
-                            <p class="text-muted small mb-0">Camisas clásicas para damas y caballeros. Nunca pierdas tu estilo.</p>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-4 col-lg-3">
-                        <div class="card h-100 p-4 shadow-sm text-center border-0 rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalBlusaVerano" style="cursor: pointer;">
-                            <h5 class="fw-bold text-dark">Blusa de Verano</h5>
-                            <p class="text-muted small mb-0">Modernas y cómodas para cualquier ocasión.</p>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-4 col-lg-3">
-                        <div class="card h-100 p-4 shadow-sm text-center border-0 rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalBlusaEstampada" style="cursor: pointer;">
-                            <h5 class="fw-bold text-dark">Blusa Estampada</h5>
-                            <p class="text-muted small mb-0">Varios diseños disponibles en todas las tallas para elegir.</p>
-                        </div>
-                    </div>
-                 
-                   <div class="col-12 col-md-6 col-lg-3">
-            <div class="card h-100 p-4 shadow-sm text-center border-0 rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalServientrega" style="cursor: pointer;">
-                <h5 class="fw-bold text-primary">Servientrega Express</h5>
-                <p class="text-muted small mb-0">Entrega a domicilio rápida que garantiza tu paquete en óptimas condiciones.</p>
-            </div>
-        </div>
-
-        <div class="modal fade" id="modalServientrega" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-white">
-                        <h5 class="modal-title fw-bold">Envíos Rápidos a Todo el País</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <img src="static/imagenes/Servientrega.webp" class="img-fluid">
-                        <p class="fw-bold text-dark">Garantizamos que tu paquete llegue en óptimas condiciones en un plazo de 24 a 48 horas laborales.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-12 col-md-6 col-lg-3">
-            <div class="card h-100 p-4 shadow-sm text-center border-0 rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalPedidos247" style="cursor: pointer;">
-                <h5 class="fw-bold text-primary">Pedidos Online 24/7</h5>
-                <p class="text-muted small mb-0">Gestiona tus pedidos a cualquier hora a través de nuestra plataforma web.</p>
-            </div>
-        </div>
-
-        <div class="modal fade" id="modalPedidos247" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-white">
-                        <h5 class="modal-title fw-bold">Atención Continua 24/7</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <img src="static/imagenes/24-7-service.jpg" class="img-fluid">
-                        <p class="fw-bold text-dark">Nuestra plataforma está lista para recibir tus órdenes a cualquier hora. ¡Gestiona tu stock sin interrupciones!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-                </div>
-
-            <style>
-            .tarjeta-interactiva {
-                background: #ffffff;
-                transition: all 0.3s ease;
-            }
-            .tarjeta-interactiva:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
-                border: 1px solid #dc3545 !important; /* Añade un elegante borde rojo al pasar el mouse */
-            }
-            </style>
-        </section>
-
-        <section id="gestion-inventario" class="py-5">
-            <div class="container">
-                <h2 class="fw-bold text-center mb-5 text-uppercase">Administración de Stock de Prendas</h2>
-                <div class="row">
-                    <div class="col-md-5 mb-4">
-                        <div class="card p-4 shadow-sm border-0">
-                            <h4 class="mb-3 text-center fw-bold text-secondary">Registrar Prenda</h4>
-                            <div id="mensaje-validacion"></div>
-                            
-                            <form id="form-producto">
-                                <div class="mb-3">
-                                    <label for="prod-nombre" class="form-label fw-bold">Seleccionar Prenda/Modelos</label>
-                                    <select class="form-select" id="prod-nombre">
-                                        <option value="">Seleccione una prenda...</option>
-                                        <option value="Pantalones Premium">Pantalones Premium</option>
-                                        <option value="Pantalones Capri">Pantalones Capri</option>
-                                        <option value="Pantalones AA">Pantalones AA</option>
-                                        <option value="Camisas Polo">Camisas Polo</option>
-                                        <option value="Blusa de Verano">Blusa de Verano</option>
-                                        <option value="Blusa Estampada">Blusa Estampada</option>
-                                    </select>
-                                    <div class="invalid-feedback"></div> 
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="prod-cantidad" class="form-label fw-bold">Cantidad (Docenas)</label>
-                                    <select class="form-select" id="prod-cantidad">
-                                        <option value="">Seleccione cantidad...</option>
-                                        <option value="Media Docena">Media Docena</option>
-                                        <option value="1 Docena">1 Docena</option>
-                                        <option value="2 Docenas">2 Docenas</option>
-                                        <option value="3 Docenas">3 Docenas</option>
-                                        <option value="4 Docenas">4 Docenas</option>
-                                        <option value="5 Docenas">5 Docenas</option>
-                                        
-                                    </select>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="prod-categoria" class="form-label fw-bold">Categoría</label>
-                                    <select class="form-select" id="prod-categoria">
-                                        <option value="">Seleccione un tipo...</option>
-                                        <option value="Damas">Damas</option>
-                                        <option value="Caballeros">Caballeros</option>
-                                        <option value="Urban">Urban Estilo</option>
-                                    </select>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                                
-                                <button type="submit" class="btn btn-danger w-100">Agregar al Catálogo</button>
-                            </form>
-
-                            <div class="modal fade" id="modalCompra" data-bs-backdrop="static" tabindex="-1" aria-labelledby="modalCompraLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content text-center">
-                                <div class="modal-header bg-dark text-white justify-content-center">
-                                    <h5 class="modal-title fw-bold" id="modalCompraLabel">¡Producto Añadido!</h5>
-                                </div>
-                                <div class="modal-body">
-                                    <p class="fs-5">¿Qué deseas hacer a continuación?</p>
-                                </div>
-                                <div class="modal-footer justify-content-center border-0">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Seguir agregando al carrito</button>
-                                    <button type="button" class="btn btn-success" onclick="cerrarCompra()">Cerrar compra</button>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-
-                            <h3 class="mt-4">Productos Registrados (<span id="contador-prendas">0</span>)</h3>
-                            <div id="lista-prendas" class="row mt-3">
-                               </div>
-                        </div>
-                    </div>
-
-                  
-                    <div class="col-md-7">
-                        <!-- Usamos row y columnas internas para separar perfectamente el texto del contador -->
-                        <div class="row align-items-center mb-4 bg-dark p-3 rounded text-white shadow-sm g-2 mx-0">
-                            <div class="col-12 col-sm-8 text-center text-sm-start">
-                                <h6 class="mb-0 fw-bold text-uppercase" style="letter-spacing: 0.5px;">Prendas Ingresadas</h6>
-                            </div>
-                            <div class="col-12 col-sm-4 text-center text-sm-end">
-                                <span class="badge bg-danger fs-6 px-3 py-2 w-100 w-sm-auto">Total: <span id="total-registros">0</span></span>
-                            </div>
-                        </div>
-                        
-                        <div id="lista-productos" class="row g-3"></div>
-                    </div>
-            
-        </section>
-
-       <section id="contacto" class="container py-5 my-5">
-            <h2 class="fw-bold mb-5 text-center text-uppercase">Contáctanos</h2>
-            
-            <div class="row g-4 align-items-stretch">
-                
-                <div class="col-12 col-md-6 col-lg-4">
-                    <form id="form-contacto" class="bg-white p-4 border rounded shadow-sm h-100 d-flex flex-column justify-content-between">
-                        <div>
-                            <h5 class="fw-bold mb-3 text-dark">Escríbenos</h5>
-                            <div class="mb-3">
-                                <label for="nombre" class="form-label small fw-semibold text-muted">Nombre completo</label>
-                                <input type="text" class="form-control" id="nombre" placeholder="Tu nombre" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="correo" class="form-label small fw-semibold text-muted">Correo electrónico</label>
-                                <input type="email" class="form-control" id="correo" placeholder="correo@ejemplo.com" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="asunto" class="form-label small fw-semibold text-muted">Asunto</label>
-                                <input type="text" class="form-control" id="asunto" placeholder="Motivo de tu consulta" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="mensaje" class="form-label small fw-semibold text-muted">Mensaje</label>
-                                <textarea class="form-control" id="mensaje" rows="3" placeholder="Escribe tu mensaje aquí..." required></textarea>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-dark w-100 fw-bold mt-2">Enviar Mensaje</button>
-                    </form>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="bg-light p-4 border rounded shadow-sm h-100 d-flex flex-column justify-content-between">
-                        <div>
-                            <h5 class="fw-bold mb-4 text-dark">Información Directa</h5>
-                            
-                            <p>
-                                <i class="bi bi-geo-alt-fill text-danger"></i> 
-                                <strong>Dirección:</strong><br>
-                                <a href="https://www.google.com/maps/search/?api=1&query=Pelileo+Av.+El+Tambo,+Ecuador" target="_blank" class="text-decoration-none text-dark fw-bold text-primary">
-                                    Pelileo Av. El Tambo, edificio Bull's - Ecuador 📍
-                                </a>
-                            </p>
-                            <div class="d-flex align-items-start mb-3">
-                                <span class="text-danger me-3"><i class="bi bi-telephone-fill fs-5"></i></span>
-                                <div>
-                                    <strong class="d-block small text-muted">Teléfono:</strong>
-                                    <span class="small">+593 99 8353 959</span>
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex align-items-start mb-4">
-                                <span class="text-danger me-3"><i class="bi bi-envelope-fill fs-5"></i></span>
-                                <div>
-                                    <strong class="d-block small text-muted">Correo:</strong>
-                                    <a href="mailto:info@alamodaexpress.com" class="small text-decoration-none text-dark">info@alamodaexpress.com</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h6 class="fw-bold small text-uppercase text-muted mb-3" style="letter-spacing: 0.5px;">Síguenos en:</h6>
-                            <div class="d-flex gap-2">
-                                <a href="#" class="btn btn-outline-primary btn-sm flex-fill fw-semibold">Facebook</a>
-                                <a href="#" class="btn btn-outline-danger btn-sm flex-fill fw-semibold">Instagram</a>
-                                <a href="#" class="btn btn-outline-dark btn-sm flex-fill fw-semibold">TikTok</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-lg-4">
-                    <div class="bg-white p-4 border rounded shadow-sm h-100 d-flex flex-column justify-content-between">
-                        <div>
-                            <h5 class="fw-bold mb-3 text-dark">Conoce más de nosotros</h5>
-                            
-                            <div class="mb-3">
-                                <video class="w-100 rounded border shadow-sm" controls style="max-height: 140px; object-fit: cover;">
-                                    <source src="{{ url_for('static', filename='video.mp4') }}" type="video/mp4">
-                                    Tu navegador no soporta videos.
-                                </video>
-                            </div>
-                            
-                            <div>
-                                <video class="w-100 rounded border shadow-sm" controls style="max-height: 140px; object-fit: cover;">
-                                    <source src="{{ url_for('static', filename='video.mp4') }}" type="video/mp4">
-                                    Tu navegador no soporta videos.
-                                </video>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+        <!-- Quiénes Somos -->
+        <section id="quienes-somos" class="bg-white rounded p-4 shadow-sm mb-4">
+            <div class="text-center py-2">
+                <h2 class="fw-bold mb-3 text-uppercase text-dark" style="letter-spacing: 1px; font-size: 1.5rem;">Quiénes Somos</h2>
+                <p class="fs-6 text-secondary text-start mb-3" style="line-height: 1.6;">
+                    Somos una firma de moda orientada a destacar la autenticidad y el estilo único de cada persona. Nos dedicamos a ofrecer prendas que fusionan las últimas tendencias globales con una calidad excepcional, brindando a nuestros clientes una experiencia de compra cercana, segura y de primera categoría.
+                </p>
+                <p class="fs-6 text-secondary text-start" style="line-height: 1.6;">
+                    Nuestra prioridad es la excelencia en cada detalle. Seleccionamos cuidadosamente nuestras prendas utilizando algodón 100% orgánico y poliésteres de alta resistencia, garantizando un confort superior, suavidad al contacto con la piel y una durabilidad prolongada en cada diseño.
+                </p>
             </div>
         </section>
 
-        <div class="container mb-5">
-            <aside class="promo-aside p-4 text-center shadow">
-                <div class="row align-items-center">
-                    <div class="col-md-6 mb-3 mb-md-0 border-end border-light">
-                        <h3 class="fw-bold text-warning">¡Promoción de la Semana!</h3>
-                        <p class="mb-0">Todos los jueves por la compra de cada docena, te llevas una prenda adicional <strong>totalmente gratis</strong>.</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h4 class="fw-bold">Horarios de Tienda Física</h4>
-                        <ul class="list-unstyled mb-0">
-                            <li>Lunes a Jueves: 08:00 - 20:00</li>
-                            <li>Viernes a Domingo: 08:00 - 21:00</li>
-                        </ul>
-                    </div>
+        <!-- Mision -->
+        <section id="mision" class="bg-white rounded p-4 shadow-sm mb-4">
+            <div class="text-center py-2">
+                <h2 class="fw-bold mb-3 text-uppercase text-dark" style="letter-spacing: 1px; font-size: 1.5rem;">Misión</h2>
+                <p class="fs-6 text-secondary text-start mb-3" style="line-height: 1.6;">
+                    Ofrecer ropa de alta calidad y vanguardia que empodere el estilo individual de nuestros clientes, brindándoles elegancia, confort y durabilidad a través de la mejor atención personalizada y selección textil.
+                </p>
+            </div>
+        </section>
+
+        <!-- Visión -->
+        <section id="vision" class="bg-white rounded p-4 shadow-sm mb-4">
+            <div class="text-center py-2">
+                <h2 class="fw-bold mb-3 text-uppercase text-dark" style="letter-spacing: 1px; font-size: 1.5rem;">Visión</h2>
+                <p class="fs-6 text-secondary text-start mb-3" style="line-height: 1.6;">
+                    Ser reconocidos como la marca de vestir referente en innovación y calidad dentro del mercado local y regional, destacándonos por la exclusividad de nuestras prendas, la excelencia en el servicio y nuestro compromiso con textiles sostenibles y de alto rendimiento.
+                </p>
+            </div>
+        </section>
+
+        <!-- Moda y Estilo -->
+    <section id="moda-estilo" class="bg-white rounded p-4 shadow-sm mb-4">
+      <div class="text-center">
+        <h2 class="fw-bold mb-4" style="color: #2c3e50; font-size: 1.5rem;">Moda y Estilo</h2>
+        <div class="row g-3 justify-content-center">
+            <!-- Imagen Hombre -->
+            <div class="col-12 col-md-6 text-center">
+                <div class="bg-light rounded p-2 d-flex align-items-center justify-content-center shadow-sm" style="height: 450px;">
+                    <img src="{{ url_for('static', filename='imagenes/Caballero.jpg') }}"
+                         alt="Moda Caballero"
+                         class="img-fluid rounded"
+                         style="max-height: 100%; max-width: 100%; object-fit: contain;">
                 </div>
-            </aside>
+            </div>
+            <!-- Imagen Dama -->
+            <div class="col-12 col-md-6 text-center">
+                <div class="bg-light rounded p-2 d-flex align-items-center justify-content-center shadow-sm" style="height: 450px;">
+                    <img src="{{ url_for('static', filename='imagenes/mod@1.jpg') }}"
+                         alt="Moda Dama"
+                         class="img-fluid rounded"
+                         style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                </div>
+            </div>
         </div>
-    </main>
+    </section>
 
-    <footer class="bg-dark text-white text-center py-4">
-        <div class="container">
-            <p class="mb-1">© 2026 - Desarrollado por Wilson Roberto Cerna Tello & Michelle Estefania Casquete Guayllas</p>
-            <p class="mb-0 text-muted small">Asignatura: Desarrollo Web | Año: 2026</p>
-        </div>
-    </footer >
+<!-- VENTANAS MODALES -->
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-
-    <div class="modal fade" id="modalPantalonesPremium" tabindex="-1" aria-labelledby="modalPremiumLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+<div class="modal fade" id="modalPantalonesPremium" tabindex="-1" aria-labelledby="modalPremiumLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title fw-bold" id="modalPremiumLabel">Catálogo: Pantalones Premium</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -461,23 +121,23 @@
             <div class="modal-body text-center">
                 <p class="text-muted small">Modelos exclusivos de alta calidad disponibles esta semana:</p>
                 <div class="row g-2">
-                <div class="col-6">
-                    <img src="static/imagenes/Premiun.webp" class="img-fluid">
-                    <span class="fw-bold d-block small text-dark">Jean Urban Premium Slim</span>
-                </div>
-                <div class="col-6">
-                    <img src="static/imagenes/Pantalones-premiun.jfif" class="img-fluid">
-                    <span class="fw-bold d-block small text-dark">Pantalón Classic Denim</span>
-                </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Premiun.webp') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Jean Urban Premium Slim</span>
+                    </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Pantalones-premiun.jfif') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Pantalón Classic Denim</span>
+                    </div>
                 </div>
             </div>
-            </div>
         </div>
-        </div>
+    </div>
+</div>
 
-        <div class="modal fade" id="modalPantalonesCapri" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+<div class="modal fade" id="modalPantalonesCapri" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title fw-bold">Catálogo: Pantalones Capri</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -485,23 +145,23 @@
             <div class="modal-body text-center">
                 <p class="text-muted small">Variedades elegantes para dama:</p>
                 <div class="row g-2">
-                <div class="col-6">
-                    <img src="static/imagenes/Capri.webp" class="img-fluid">
-                    <span class="fw-bold d-block small text-dark">Capri Estilizado Azul Oscuro</span>
-                </div>
-                <div class="col-6">
-                    <img src="static/imagenes/Capri-1.jpg" class="img-fluid">
-                    <span class="fw-bold d-block small text-dark">Capri Casual de Verano</span>
-                </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Capri.webp') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Capri Estilizado Azul Oscuro</span>
+                    </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Capri-1.jpg') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Capri Casual de Verano</span>
+                    </div>
                 </div>
             </div>
-            </div>
         </div>
-        </div>
+    </div>
+</div>
 
-        <div class="modal fade" id="modalPantalonesAA" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+<div class="modal fade" id="modalPantalonesAA" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title fw-bold">Catálogo: Pantalones AA</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -509,23 +169,23 @@
             <div class="modal-body text-center">
                 <p class="text-muted small">Estilos urbanos y modernos:</p>
                 <div class="row g-2">
-                <div class="col-6">
-                    <img src="static/imagenes/Pantalon-urban.jfif" class="img-fluid">
-                    <span class="fw-bold d-block small text-dark">Jogger Urbano AA</span>
-                </div>
-                <div class="col-6">
-                    <img src="static/imagenes/Pant-urban.jfif" class="img-fluid">
-                    <span class="fw-bold d-block small text-dark">Pantalón Cargo Streetwear</span>
-                </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Pantalon-urban.jfif') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Jogger Urbano AA</span>
+                    </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Pant-urban.jfif') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Pantalón Cargo Streetwear</span>
+                    </div>
                 </div>
             </div>
-            </div>
         </div>
-        </div>
+    </div>
+</div>
 
-        <div class="modal fade" id="modalCamisasPolo" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+<div class="modal fade" id="modalCamisasPolo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title fw-bold">Catálogo: Camisas Polo</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -533,23 +193,23 @@
             <div class="modal-body text-center">
                 <p class="text-muted small">Colección clásica unisex:</p>
                 <div class="row g-2">
-                <div class="col-6">
-                    <img src="static/imagenes/Pol.jfif" class="img-fluid">
-                    <span class="fw-bold d-block small text-dark">Polo Algodón Pima</span>
-                </div>
-                <div class="col-6">
-                    <img src="static/imagenes/Polo.jfif" class="img-fluid">
-                    <span class="fw-bold d-block small text-dark">Polo Ejecutivo Sport</span>
-                </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Pol.jfif') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Polo Algodón Pima</span>
+                    </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Polo.jfif') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Polo Ejecutivo Sport</span>
+                    </div>
                 </div>
             </div>
-            </div>
         </div>
-        </div>
+    </div>
+</div>
 
-        <div class="modal fade" id="modalBlusaVerano" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+<div class="modal fade" id="modalBlusaVerano" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title fw-bold">Catálogo: Blusas de Verano</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -557,23 +217,23 @@
             <div class="modal-body text-center">
                 <p class="text-muted small">Prendas frescas y cómodas:</p>
                 <div class="row g-2">
-                <div class="col-6">
-                    <img src="static/imagenes/Veran.jpg" class="img-fluid">
-                    <span class="fw-bold d-block small text-dark">Blusa Fresca Lino Verdoza </span>
-                </div>
-                <div class="col-6">
-                    <img src="static/imagenes/Verano.jfif" class="img-fluid">
-                    <span class="fw-bold d-block small text-dark">Top Casual de Verano</span>
-                </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Veran.jpg') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Blusa Fresca Lino Verdoza</span>
+                    </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Verano.jfif') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Top Casual de Verano</span>
+                    </div>
                 </div>
             </div>
-            </div>
         </div>
-        </div>
+    </div>
+</div>
 
-        <div class="modal fade" id="modalBlusaEstampada" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+<div class="modal fade" id="modalBlusaEstampada" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title fw-bold">Catálogo: Blusas Estampadas</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -581,49 +241,84 @@
             <div class="modal-body text-center">
                 <p class="text-muted small">Diseños únicos a todo color:</p>
                 <div class="row g-2">
-                <div class="col-6">
-                    <img src="static/imagenes/Floreada.webp" class="img-fluid">
-                    <span class="fw-bold d-block small text-dark">Blusa Estampado Floral</span>
-                </div>
-                <div class="col-6">
-                    <img src="static/imagenes/Esampada.jpg" class="img-fluid">
-                    <span class="fw-bold d-block small text-dark">Blusa Patrón Geométrico</span>
-                </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Floreada.webp') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Blusa Estampado Floral</span>
+                    </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Esampada.jpg') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Blusa Patrón Geométrico</span>
+                    </div>
                 </div>
             </div>
-            </div>
         </div>
-        </div>
-        <div class="modal fade" id="modalDatosEnvio" tabindex="-1" aria-labelledby="envioModalLabel" aria-hidden="true" data-bs-backdrop="static">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title fw-bold" id="envioModalLabel">📦 Registra tus datos para el envío</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="form-datos-envio">
-          <div class="mb-3">
-            <label class="form-label fw-bold small text-secondary">Nombre Completo</label>
-            <input type="text" class="form-control shadow-sm" id="envio-nombre" required placeholder="Ej. Juan Pérez">
-          </div>
-          <div class="mb-3">
-            <label class="form-label fw-bold small text-secondary">Identificación / Cédula</label>
-            <input type="text" class="form-control shadow-sm" id="envio-id" required placeholder="Ej. 1234567890">
-          </div>
-          <div class="mb-3">
-            <label class="form-label fw-bold small text-secondary">Dirección Exacta de Entrega</label>
-            <input type="text" class="form-control shadow-sm" id="envio-direccion" required placeholder="Calle principal, secundaria y N° de casa">
-          </div>
-          <div class="mb-3">
-            <label class="form-label fw-bold small text-secondary">Número de Contacto</label>
-            <input type="tel" class="form-control shadow-sm" id="envio-telefono" required placeholder="Ej. 0999999999">
-          </div>
-          <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow-sm mt-2">Confirmar y Enviar Pedido 🚀</button>
-        </form>
-      </div>
     </div>
-  </div>
 </div>
-</body>
-</html>
+
+<div class="modal fade" id="modalServientrega" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold">Envíos Rápidos a Todo el País</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="{{ url_for('static', filename='imagenes/Servientrega.webp') }}" class="img-fluid rounded mb-2 shadow-sm" style="max-height: 200px;">
+                <p class="fw-bold text-dark mb-0">Garantizamos que tu paquete llegue en óptimas condiciones en un plazo de 24 a 48 horas laborales.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalPedidos247" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold">Atención Continua 24/7</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="{{ url_for('static', filename='imagenes/24-7-service.jpg') }}" class="img-fluid rounded mb-2 shadow-sm" style="max-height: 200px;">
+                <p class="fw-bold text-dark mb-0">Nuestra plataforma está lista para recibir tus órdenes a cualquier hora. ¡Gestiona tu stock sin interrupciones!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDatosEnvio" tabindex="-1" aria-labelledby="envioModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold" id="envioModalLabel">📦 Registra tus datos para el envío</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Se agregaron action y method="POST" -->
+                <form id="form-datos-envio" action="{{ url_for('guardar_pedido') }}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-secondary">Nombre Completo</label>
+                        <!-- Se agregó name="nombre" -->
+                        <input type="text" class="form-control shadow-sm" id="envio-nombre" name="nombre" required placeholder="Ej. Juan Pérez">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-secondary">Identificación / Cédula</label>
+                        <!-- Se agregó name="cedula" -->
+                        <input type="text" class="form-control shadow-sm" id="envio-id" name="cedula" required placeholder="Ej. 1234567890">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-secondary">Dirección Exacta de Entrega</label>
+                        <!-- Se agregó name="direccion" -->
+                        <input type="text" class="form-control shadow-sm" id="envio-direccion" name="direccion" required placeholder="Calle principal, secundaria y N° de casa">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-secondary">Número de Contacto</label>
+                        <!-- Se agregó name="telefono" -->
+                        <input type="tel" class="form-control shadow-sm" id="envio-telefono" name="telefono" required placeholder="Ej. 0999999999">
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow-sm mt-2">Confirmar y Enviar Pedido 🚀</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

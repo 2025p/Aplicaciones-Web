@@ -1,0 +1,57 @@
+/* ==========================================================================
+   ALA MODA EXPRESS - ESTILOS GLOBALES UNIFICADOS (SEMANA 7)
+   ========================================================================== */
+
+:root {
+    --color-principal: #2c3e50;
+    --color-acento: #e74c3c;
+    --color-fondo: #f4f6f9; /* Gris azulado suave que hace resaltar el diseño */
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--color-fondo) !important;
+    color: #333333;
+    transition: background-color 0.3s ease;
+}
+
+/* --- SECCIÓN HERO --- */
+.hero-section {
+    background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('../imagenes/Tienda_Ala_Moda.jpg') no-repeat center center/cover;
+    color: white;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+/* --- EFECTO NOTORIO PARA LAS TARJETAS DINÁMICAS (HOVER ANIMADO) --- */
+.card-producto {
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-producto:hover {
+    transform: translateY(-8px); /* Eleva la tarjeta con sutileza */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important; /* Sombra profunda elegante */
+}
+
+/* --- AJUSTE DE PROPORCIÓN PARA LAS IMÁGENES DEL CATÁLOGO --- */
+.img-moda {
+    max-height: 450px;
+    width: 100%;
+    object-fit: cover;
+}
+/* --- BANNER INFERIOR EN TONO light red --- */
+.banner-light red {
+    background-color: #afaff7 !important; /* Color light red Hermoso */
+    color: #4A4A6A !important; /* Texto en un tono púrpura oscuro sutil */
+    border-left: 4px solid #B0A8B9; /* Detalle de borde elegante */
+}
+
+.banner-light red h3, .banner-light red h4 {
+    color: #3B3B58 !important;
+    font-weight: 700;
+}
+
+.border-purple {
+    border-color: #C8C2D1 !important; /* Línea divisoria suave para el banner */
+}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="bg-white p-4 p-md-5 rounded shadow-sm border-start border-4 border-danger">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="fw-bold text-uppercase text-dark mb-0">
+        <i class="bi bi-box-seam me-2 text-danger"></i>Pedidos Registrados (SQLite)
+      </h3>
+      <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-sm fw-bold">
+        ← Volver al Inicio
+      </a>
+    </div>
+
+    {% if pedidos %}
+      <div class="table-responsive">
+        <table class="table table-hover align-middle border">
+          <thead class="table-dark text-uppercase small">
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Cédula</th>
+              <th>Dirección</th>
+              <th>Teléfono</th>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Talla</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in pedidos %}
+            <tr>
+              <td><span class="badge bg-secondary">#{{ p['id'] }}</span></td>
+              <td class="fw-bold text-dark">{{ p['nombre'] }}</td>
+              <td>{{ p['cedula'] }}</td>
+              <td><small class="text-muted">{{ p['direccion'] }}</small></td>
+              <td>{{ p['telefono'] }}</td>
+              <td><span class="badge bg-danger">{{ p['producto'] or 'N/A' }}</span></td>
+              <td>{{ p['cantidad'] }} docena(s)</td>
+              <td><span class="badge bg-light text-dark border">{{ p['talla'] or 'Standard' }}</span></td>
+              <td><small class="text-muted">{{ p['fecha'] }}</small></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-info text-center py-4 my-3" role="alert">
+        <i class="bi bi-info-circle fs-4 d-block mb-2"></i>
+        Aún no hay pedidos registrados en el sistema.
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

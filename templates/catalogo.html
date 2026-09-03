@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}Catálogo - Ala Moda Express{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h3 class="fw-bold text-center text-uppercase mb-4">Catálogo de Productos</h3>
+    
+    <div class="row g-4 justify-content-center">
+        <!-- 1. Pantalones Premium -->
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="card h-100 shadow-sm border-0">
+                <img src="{{ url_for('static', filename='imagenes/Caballero.jpg') }}" class="card-img-top" alt="Pantalones Premium" style="height: 220px; object-fit: cover;">
+                <div class="card-body text-center d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold fs-6">Pantalones Premium</h5>
+                        <p class="card-text text-muted small">Estilo moderno y materiales de alta durabilidad.</p>
+                    </div>
+                    <button class="btn btn-outline-danger btn-sm fw-bold w-100 mt-2" data-bs-toggle="modal" data-bs-target="#modalPantalones">Ver Detalle</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Colección Moda -->
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="card h-100 shadow-sm border-0">
+                <img src="{{ url_for('static', filename='imagenes/moda.jpg') }}" class="card-img-top" alt="Colección Moda" style="height: 220px; object-fit: cover;">
+                <div class="card-body text-center d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold fs-6">Colección Moda</h5>
+                        <p class="card-text text-muted small">Diseños de temporada para damas y caballeros.</p>
+                    </div>
+                    <button class="btn btn-outline-danger btn-sm fw-bold w-100 mt-2" data-bs-toggle="modal" data-bs-target="#modalModa">Ver Detalle</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Sección Niños -->
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="card h-100 shadow-sm border-0">
+                <img src="{{ url_for('static', filename='imagenes/Verano.jfif') }}" class="card-img-top" alt="Sección Niños" style="height: 220px; object-fit: cover;">
+                <div class="card-body text-center d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold fs-6">Sección Niños</h5>
+                        <p class="card-text text-muted small">Ropa cómoda, divertida y resistente para los más pequeños.</p>
+                    </div>
+                    <button class="btn btn-outline-danger btn-sm fw-bold w-100 mt-2" data-bs-toggle="modal" data-bs-target="#modalNinos">Ver Detalle</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Colección de Invierno -->
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="card h-100 shadow-sm border-0">
+                <img src="{{ url_for('static', filename='imagenes/Pantalones-premiun.jfif') }}" class="card-img-top" alt="Colección de Invierno" style="height: 220px; object-fit: cover;">
+                <div class="card-body text-center d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title fw-bold fs-6">Colección de Invierno</h5>
+                        <p class="card-text text-muted small">Abrigos, chaquetas y prendas cálidas de alta calidad.</p>
+                    </div>
+                    <button class="btn btn-outline-danger btn-sm fw-bold w-100 mt-2" data-bs-toggle="modal" data-bs-target="#modalInvierno">Ver Detalle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= MODALES DE SURTIDO ================= -->
+<div class="modal fade" id="modalPantalones" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold fs-6">Surtido: Pantalones Premium</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3 text-center">
+                    <div class="col-6 col-md-4">
+                        <div class="border p-2 rounded shadow-sm">
+                            <img src="{{ url_for('static', filename='imagenes/Caballero.jpg') }}" class="img-fluid rounded mb-2" style="height: 150px; object-fit: cover;">
+                            <h6 class="fw-bold small mb-1">Jean Classic Dark</h6>
+                            <button class="btn btn-sm btn-success w-100 fw-bold" onclick="abrirCarrito('Jean Classic Dark')">🛒 Comprar</button>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="border p-2 rounded shadow-sm">
+                            <img src="{{ url_for('static', filename='imagenes/Premiun.webp') }}" class="img-fluid rounded mb-2" style="height: 150px; object-fit: cover;">
+                            <h6 class="fw-bold small mb-1">Pantalón Slim Fit</h6>
+                            <button class="btn btn-sm btn-success w-100 fw-bold" onclick="abrirCarrito('Pantalón Slim Fit')">🛒 Comprar</button>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="border p-2 rounded shadow-sm">
+                            <img src="{{ url_for('static', filename='imagenes/Capri.webp') }}" class="img-fluid rounded mb-2" style="height: 150px; object-fit: cover;">
+                            <h6 class="fw-bold small mb-1">Pantalón Chino Executive</h6>
+                            <button class="btn btn-sm btn-success w-100 fw-bold" onclick="abrirCarrito('Pantalón Chino Executive')">🛒 Comprar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalModa" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold fs-6">Surtido: Colección Moda</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3 text-center">
+                    <div class="col-6 col-md-4">
+                        <div class="border p-2 rounded shadow-sm">
+                            <img src="{{ url_for('static', filename='imagenes/moda.jpg') }}" class="img-fluid rounded mb-2" style="height: 150px; object-fit: cover;">
+                            <h6 class="fw-bold small mb-1">Conjunto Denim Chic</h6>
+                            <button class="btn btn-sm btn-success w-100 fw-bold" onclick="abrirCarrito('Conjunto Denim Chic')">🛒 Comprar</button>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="border p-2 rounded shadow-sm">
+                            <img src="{{ url_for('static', filename='imagenes/Floreada.webp') }}" class="img-fluid rounded mb-2" style="height: 150px; object-fit: cover;">
+                            <h6 class="fw-bold small mb-1">Blusa Floral Moda</h6>
+                            <button class="btn btn-sm btn-success w-100 fw-bold" onclick="abrirCarrito('Blusa Floral Moda')">🛒 Comprar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalNinos" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold fs-6">Surtido: Sección Niños</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3 text-center">
+                    <div class="col-6 col-md-4">
+                        <div class="border p-2 rounded shadow-sm">
+                            <img src="{{ url_for('static', filename='imagenes/Verano.jfif') }}" class="img-fluid rounded mb-2" style="height: 150px; object-fit: cover;">
+                            <h6 class="fw-bold small mb-1">Conjunto Verano Infantil</h6>
+                            <button class="btn btn-sm btn-success w-100 fw-bold" onclick="abrirCarrito('Conjunto Verano Infantil')">🛒 Comprar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalInvierno" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold fs-6">Surtido: Colección de Invierno</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3 text-center">
+                    <div class="col-6 col-md-6">
+                        <div class="border p-2 rounded shadow-sm">
+                            <img src="{{ url_for('static', filename='imagenes/Pantalones-premiun.jfif') }}" class="img-fluid rounded mb-2" style="height: 150px; object-fit: cover;">
+                            <h6 class="fw-bold small mb-1">Chaqueta Térmica</h6>
+                            <button class="btn btn-sm btn-success w-100 fw-bold" onclick="abrirCarrito('Chaqueta Térmica')">🛒 Comprar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= MODAL FLOTANTE: FORMULARIO AL CARRITO ================= -->
+<div class="modal fade" id="modalCarrito" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold fs-6">🛒 Agregar al Carrito de Pedidos</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-carrito-pedido">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Producto Seleccionado</label>
+                        <input type="text" id="producto-nombre" class="form-control bg-light" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Cantidad (Docenas)</label>
+                        <select class="form-select" id="carrito-cantidad" required>
+                            <option value="" selected disabled>Seleccione cantidad...</option>
+                            <option value="1">1 Docena</option>
+                            <option value="2">2 Docenas</option>
+                            <option value="3">3 Docenas</option>
+                            <option value="5">5 Docenas</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Talla Preferencial</label>
+                        <select class="form-select" id="carrito-talla" required>
+                            <option value="" selected disabled>Seleccione una talla...</option>
+                            <option value="S">S - Pequeña</option>
+                            <option value="M">M - Mediana</option>
+                            <option value="L">L - Grande</option>
+                            <option value="Surtido">Surtido de Tallas</option>
+                        </select>
+                    </div>
+                    <div id="error-carrito" class="alert alert-danger d-none py-2 small" role="alert">
+                        Por favor, seleccione una cantidad y una talla.
+                    </div>
+                    <button type="button" class="btn btn-danger w-100 fw-bold" onclick="confirmarPedido()">Confirmar y Añadir al Carrito</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDatosEnvio" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold">📦 Registra tus datos para el envío</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-datos-envio" action="{{ url_for('guardar_pedido') }}" method="POST">
+                    
+                    <!-- PROTECCIÓN CSRF (Requisito Semana 11 y 12) -->
+                    {{ form.hidden_tag() if form else '' }}
+                    
+                    <!-- Campos Ocultos para detalles del producto -->
+                    <input type="hidden" id="envio-producto" name="producto">
+                    <input type="hidden" id="envio-cantidad" name="cantidad">
+                    <input type="hidden" id="envio-talla" name="talla">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-secondary">Nombre Completo</label>
+                        <input type="text" class="form-control shadow-sm" id="envio-nombre" name="nombre" required placeholder="Ej. Juan Pérez">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-secondary">Identificación / Cédula</label>
+                        <input type="text" class="form-control shadow-sm" id="envio-id" name="cedula" required placeholder="Ej. 1234567890">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-secondary">Dirección Exacta de Entrega</label>
+                        <input type="text" class="form-control shadow-sm" id="envio-direccion" name="direccion" required placeholder="Calle principal, secundaria y N° de casa">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-secondary">Número de Contacto</label>
+                        <input type="tel" class="form-control shadow-sm" id="envio-telefono" name="telefono" required placeholder="Ej. 0999999999">
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow-sm mt-2">Confirmar y Enviar Pedido 🚀</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

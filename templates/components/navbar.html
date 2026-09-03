@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-uppercase" href="{{ url_for('inicio') }}">
+            <i class="bi bi-bag-heart-fill text-danger me-2"></i>Ala Moda Express
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto fw-semibold">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('inicio') }}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('catalogo') }}">Catálogo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('contacto') }}">Contacto</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('ver_pedidos') }}">PEDIDOS</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

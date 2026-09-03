@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-4">
+    <h2>Registrar Producto</h2>
+    <form method="POST" action="" class="card p-4 shadow-sm">
+        <!-- Token CSRF indispensable -->
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.nombre.label(class="form-label") }}
+            {{ form.nombre(class="form-control") }}
+            {% for error in form.nombre.errors %}
+                <small class="text-danger">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.precio.label(class="form-label") }}
+            {{ form.precio(class="form-control") }}
+            {% for error in form.precio.errors %}
+                <small class="text-danger">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.stock.label(class="form-label") }}
+            {{ form.stock(class="form-control") }}
+            {% for error in form.stock.errors %}
+                <small class="text-danger">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar Producto</button>
+    </form>
+</div>
+{% endblock %}

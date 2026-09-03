@@ -219,4 +219,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
+document.getElementById('form-contacto').addEventListener('submit', function(event) {
+    const form = event.target;
+    
+    // Validar campos vacíos
+    if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+        form.classList.add('was-validated');
+    } else {
+        event.preventDefault(); // Evita el envío real para mostrar el mensaje
+        
+        // Mostrar mensaje de éxito
+        const msgEnvio = document.getElementById('mensaje-envio');
+        msgEnvio.classList.remove('d-none');
+        
+        // Ocultar mensaje después de 3 segundos
+        setTimeout(() => {
+            msgEnvio.classList.add('d-none');
+            form.reset();
+            form.classList.remove('was-validated');
+        }, 3000);
+    }
+});
