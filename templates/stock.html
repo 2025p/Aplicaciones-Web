@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Administración de Stock - Ala Moda Express{% endblock %}
+{% block title %}Stock y Pedidos - Ala Moda Express{% endblock %}
 
 {% block content %}
 <div class="container my-5">
@@ -8,7 +8,7 @@
         <div class="col-md-8">
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-header bg-dark text-white fw-bold">
-                    <i class="bi bi-box-seam me-2"></i>Administración de Stock de Prendas
+                    <i class="bi bi-box-seam me-2"></i>Stock y Pedidos de Prendas Por Mayor
                 </div>
                 <div class="card-body">
                     <h5 class="fw-bold mb-3">Registrar Prenda</h5>
@@ -19,8 +19,17 @@
                                 <option value="" selected disabled>Seleccione una prenda...</option>
                                 <option value="Pantalones Premium">Pantalones Premium</option>
                                 <option value="Pantalones Capri">Pantalones Capri</option>
+                                <option value="Pantalones Gabardina">Pantalones Gabardina</option>
+                                <option value="Pantalones Jean Clasico">Pantalones Jean Clasico</option>
                                 <option value="Camisas Polo">Camisas Polo</option>
+                                <option value="Camisas Oversize">Camisas Oversize</option>
+                                <option value="Camisas Clasicas">Camisas Clasicas</option>
+                                <option value="Camisas De Estampado">Camisas De Estampado</option>
                                 <option value="Blusas Estampadas">Blusas Estampadas</option>
+                                <option value="Blusas Floreadas">Blusas Floreadas</option>
+                                <option value="Blusas Corset">Blusas Corset</option>
+                                <option value="Chaquetas de Cuero">Chaquetas de Cuero</option>
+                                <option value="Sudaderas con Estampado">Sudaderas con Estampado</option>
                             </select>
                         </div>
 
@@ -42,6 +51,9 @@
                                 <option value="Caballero">Caballero</option>
                                 <option value="Dama">Dama</option>
                                 <option value="Niños">Niños</option>
+                                <option value="Niñas">Niñas</option>
+                                <option value="Niños Surtidos">Niños Surtidos</option>
+                                <option value="Adultos Surtidos">Adultos Surtidos</option>
                             </select>
                         </div>
 
@@ -60,7 +72,7 @@
                     <p class="fw-bold mb-2">¿Qué deseas hacer a continuación?</p>
                     <div class="d-flex gap-2 mb-4">
                         <button type="button" class="btn btn-outline-secondary btn-sm fw-bold" onclick="limpiarFormularioStock()">Seguir agregando</button>
-                        <button type="button" class="btn btn-dark btn-sm fw-bold" onclick="alert('Registro de stock finalizado.')">Cerrar compra</button>
+                        <button type="button" class="btn btn-dark btn-sm fw-bold" onclick="cerrarCompra()">Cerrar compra</button>
                     </div>
 
                     <hr>
@@ -91,14 +103,19 @@
 </div>
 
 <script>
-let totalIngresados = 0;
+// Arreglo global donde guardaremos los datos reales para enviarlos a Flask
+let prendasIngresadas = [];
 
 function agregarAlStock() {
-    const prenda = document.getElementById('stock-prenda').value;
-    const cantidad = document.getElementById('stock-cantidad').value;
-    const categoria = document.getElementById('stock-categoria').value;
+    const prendaSelect = document.getElementById('stock-prenda');
+    const cantidadSelect = document.getElementById('stock-cantidad');
+    const categoriaSelect = document.getElementById('stock-categoria');
     const msgError = document.getElementById('msg-error-stock');
     const msgExito = document.getElementById('msg-exito-stock');
+
+    const prenda = prendaSelect.value;
+    const cantidad = cantidadSelect.value;
+    const categoria = categoriaSelect.value;
 
     // Validar campos vacíos
     if (!prenda || !cantidad || !categoria) {
@@ -112,24 +129,36 @@ function agregarAlStock() {
     msgExito.classList.remove('d-none');
     msgExito.classList.add('d-flex');
 
-    // Quitar mensaje de tabla vacía
-    const filaVacia = document.getElementById('fila-vacia');
-    if (filaVacia) filaVacia.remove();
+    // Guardar objeto en el arreglo global
+    prendasIngresadas.push({ prenda, cantidad, categoria });
 
-    // Insertar en la tabla
+    // Actualizar la tabla visual
+    renderizarTabla();
+}
+
+function renderizarTabla() {
     const tabla = document.getElementById('tabla-stock-body');
-    const nuevaFila = document.createElement('tr');
-    nuevaFila.innerHTML = `
-        <td>${prenda}</td>
-        <td>${cantidad}</td>
-        <td><span class="badge bg-info text-dark">${categoria}</span></td>
-        <td><button class="btn btn-outline-danger btn-sm py-0" onclick="eliminarFilaStock(this)">Eliminar</button></td>
-    `;
-    tabla.appendChild(nuevaFila);
+    const totalElem = document.getElementById('total-stock');
+    tabla.innerHTML = '';
 
-    // Actualizar Total
-    totalIngresados++;
-    document.getElementById('total-stock').innerText = totalIngresados;
+    if (prendasIngresadas.length === 0) {
+        tabla.innerHTML = `<tr id="fila-vacia"><td colspan="4" class="text-muted py-3">No hay prendas ingresadas aún.</td></tr>`;
+        totalElem.innerText = '0';
+        return;
+    }
+
+    prendasIngresadas.forEach((item, index) => {
+        const nuevaFila = document.createElement('tr');
+        nuevaFila.innerHTML = `
+            <td>${item.prenda}</td>
+            <td>${item.cantidad}</td>
+            <td><span class="badge bg-info text-dark">${item.categoria}</span></td>
+            <td><button type="button" class="btn btn-outline-danger btn-sm py-0" onclick="eliminarFilaStock(${index})">Eliminar</button></td>
+        `;
+        tabla.appendChild(nuevaFila);
+    });
+
+    totalElem.innerText = prendasIngresadas.length;
 }
 
 function limpiarFormularioStock() {
@@ -140,15 +169,41 @@ function limpiarFormularioStock() {
     document.getElementById('msg-exito-stock').classList.add('d-none');
 }
 
-function eliminarFilaStock(btn) {
-    btn.closest('tr').remove();
-    totalIngresados--;
-    document.getElementById('total-stock').innerText = totalIngresados;
-    
-    const tabla = document.getElementById('tabla-stock-body');
-    if (tabla.children.length === 0) {
-        tabla.innerHTML = `<tr id="fila-vacia"><td colspan="4" class="text-muted py-3">No hay prendas ingresadas aún.</td></tr>`;
+function eliminarFilaStock(index) {
+    prendasIngresadas.splice(index, 1);
+    renderizarTabla();
+}
+
+// ESTA FUNCIÓN ENVÍA LOS DATOS A FLASK Y A POSTGRESQL
+function cerrarCompra() {
+    if (prendasIngresadas.length === 0) {
+        alert('Debes ingresar al menos una prenda antes de cerrar la compra.');
+        return;
     }
+
+    // Enviar datos vía AJAX al endpoint /guardar_stock en app.py
+    fetch('/guardar_stock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prendas: prendasIngresadas })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('¡Stock registrado exitosamente en PostgreSQL!');
+            
+            // Vaciar formulario y tabla
+            prendasIngresadas = [];
+            renderizarTabla();
+            limpiarFormularioStock();
+        } else {
+            alert('Error al guardar en la base de datos: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ocurrió un error de red al conectar con el servidor Flask.');
+    });
 }
 </script>
 {% endblock %}

@@ -50,6 +50,32 @@
             </div>
         </section>
 
+             <!-- Moda y Estilo -->
+    <section id="moda-estilo" class="bg-white rounded p-4 shadow-sm mb-4">
+      <div class="text-center">
+        <h2 class="fw-bold mb-4" style="color: #2c3e50; font-size: 1.5rem;">Moda y Estilo</h2>
+        <div class="row g-3 justify-content-center">
+            <!-- Imagen Hombre -->
+            <div class="col-12 col-md-6 text-center">
+                <div class="bg-light rounded p-2 d-flex align-items-center justify-content-center shadow-sm" style="height: 450px;">
+                    <img src="{{ url_for('static', filename='imagenes/Caballero.jpg') }}"
+                         alt="Moda Caballero"
+                         class="img-fluid rounded"
+                         style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                </div>
+            </div>
+            <!-- Imagen Dama -->
+            <div class="col-12 col-md-6 text-center">
+                <div class="bg-light rounded p-2 d-flex align-items-center justify-content-center shadow-sm" style="height: 450px;">
+                    <img src="{{ url_for('static', filename='imagenes/mod@1.jpg') }}"
+                         alt="Moda Dama"
+                         class="img-fluid rounded"
+                         style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                </div>
+            </div>
+        </div>
+    </section>
+
         <!-- Quiénes Somos -->
         <section id="quienes-somos" class="bg-white rounded p-4 shadow-sm mb-4">
             <div class="text-center py-2">
@@ -83,32 +109,7 @@
             </div>
         </section>
 
-        <!-- Moda y Estilo -->
-    <section id="moda-estilo" class="bg-white rounded p-4 shadow-sm mb-4">
-      <div class="text-center">
-        <h2 class="fw-bold mb-4" style="color: #2c3e50; font-size: 1.5rem;">Moda y Estilo</h2>
-        <div class="row g-3 justify-content-center">
-            <!-- Imagen Hombre -->
-            <div class="col-12 col-md-6 text-center">
-                <div class="bg-light rounded p-2 d-flex align-items-center justify-content-center shadow-sm" style="height: 450px;">
-                    <img src="{{ url_for('static', filename='imagenes/Caballero.jpg') }}"
-                         alt="Moda Caballero"
-                         class="img-fluid rounded"
-                         style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                </div>
-            </div>
-            <!-- Imagen Dama -->
-            <div class="col-12 col-md-6 text-center">
-                <div class="bg-light rounded p-2 d-flex align-items-center justify-content-center shadow-sm" style="height: 450px;">
-                    <img src="{{ url_for('static', filename='imagenes/mod@1.jpg') }}"
-                         alt="Moda Dama"
-                         class="img-fluid rounded"
-                         style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                </div>
-            </div>
-        </div>
-    </section>
-
+   
 <!-- VENTANAS MODALES -->
 
 <div class="modal fade" id="modalPantalonesPremium" tabindex="-1" aria-labelledby="modalPremiumLabel" aria-hidden="true">

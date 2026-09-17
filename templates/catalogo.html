@@ -92,8 +92,8 @@
                     <div class="col-6 col-md-4">
                         <div class="border p-2 rounded shadow-sm">
                             <img src="{{ url_for('static', filename='imagenes/Capri.webp') }}" class="img-fluid rounded mb-2" style="height: 150px; object-fit: cover;">
-                            <h6 class="fw-bold small mb-1">Pantalón Chino Executive</h6>
-                            <button class="btn btn-sm btn-success w-100 fw-bold" onclick="abrirCarrito('Pantalón Chino Executive')">🛒 Comprar</button>
+                            <h6 class="fw-bold small mb-1">Pantalón Corto Exclusivo</h6>
+                            <button class="btn btn-sm btn-success w-100 fw-bold" onclick="abrirCarrito('Pantalón Corto Exclusivo')">🛒 Comprar</button>
                         </div>
                     </div>
                 </div>
@@ -193,10 +193,10 @@
                         <label class="form-label small fw-bold">Cantidad (Docenas)</label>
                         <select class="form-select" id="carrito-cantidad" required>
                             <option value="" selected disabled>Seleccione cantidad...</option>
-                            <option value="1">1 Docena</option>
-                            <option value="2">2 Docenas</option>
-                            <option value="3">3 Docenas</option>
-                            <option value="5">5 Docenas</option>
+                            <option value="1">1 Prenda</option>
+                            <option value="2">1 Docenas</option>
+                            <option value="3">2 Docenas</option>
+                            <option value="5">3 Docenas</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -229,8 +229,8 @@
             <div class="modal-body">
                 <form id="form-datos-envio" action="{{ url_for('guardar_pedido') }}" method="POST">
                     
-                    <!-- PROTECCIÓN CSRF (Requisito Semana 11 y 12) -->
-                    {{ form.hidden_tag() if form else '' }}
+                    <!-- PROTECCIÓN CSRF 
+                    {{ form.hidden_tag() if form }}
                     
                     <!-- Campos Ocultos para detalles del producto -->
                     <input type="hidden" id="envio-producto" name="producto">

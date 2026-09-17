@@ -1,4 +1,3 @@
-
 // 1. DECLARACIÓN DE VARIABLES GLOBALES
 
 const form = document.getElementById('form-producto');
@@ -14,7 +13,6 @@ let catalogoPrendas = [];
 // 2. INICIALIZACIÓN DE EVENTOS Y VALIDACIONES
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Escuchar cuando el usuario cambia de opinión o sale del campo (Acciones del profesor)
     if(inputNombre) {
         inputNombre.addEventListener('change', validarNombre);
         inputNombre.addEventListener('blur', validarNombre);
@@ -30,11 +28,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if(form) {
         form.addEventListener('submit', manejarEnvio);
     }
+    
+    // Asignar evento al formulario de envio/pedido si existe
+    const formEnvio = document.getElementById('form-datos-envio');
+    if (formEnvio) {
+        formEnvio.addEventListener('submit', procesarEnvioBaseDatos);
+    }
+
     renderizarCatalogo();
 });
 
 
-// 3. FUNCIONES DE VALIDACIÓN (BORDES EN ROJO / VERDE)
+// 3. FUNCIONES DE VALIDACIÓN
 
 function validarNombre() {
     if (!inputNombre || inputNombre.value === "") {
@@ -63,18 +68,16 @@ function validarCategoria() {
     return true;
 }
 
-// Pintar el campo de rojo y poner el aviso abajo
 function mostrarError(elemento, mensaje) {
     if(!elemento) return;
     elemento.classList.remove('is-valid');
     elemento.classList.add('is-invalid');
-    const feedback = elemento.nextElementSibling; // Captura el <div class="invalid-feedback">
+    const feedback = elemento.nextElementSibling;
     if (feedback && feedback.classList.contains('invalid-feedback')) {
         feedback.textContent = mensaje;
     }
 }
 
-// Pintar el campo de verde si todo está bien
 function mostrarExito(elemento) {
     if(!elemento) return;
     elemento.classList.remove('is-invalid');
@@ -82,35 +85,31 @@ function mostrarExito(elemento) {
 }
 
 
-// 4. MANEJO DEL ENVÍO DEL PRODUCTO
+// 4. MANEJO DEL ENVÍO DEL PRODUCTO (ALMACENAJE LOCAL TEMPORAL)
 
 function manejarEnvio(evento) {
     evento.preventDefault();
 
-    // Forzar la validación de todos los campos al dar clic en enviar
     const nValido = validarNombre();
     const qValido = validarCantidad();
     const cValido = validarCategoria();
 
-    // Solo si todos están aprobados (en verde) pasa al catálogo
     if (nValido && qValido && cValido) {
         const nuevaPrenda = {
             id: Date.now(),
-            nombre: inputNombre.value,
+            prenda: inputNombre.value,
             cantidad: inputCantidad.value,
             categoria: selectCategoria.value
         };
 
         catalogoPrendas.push(nuevaPrenda);
-        renderizarCatalogo(); // Actualiza el indicador y las tarjetas al instante
+        renderizarCatalogo();
         
-        // Limpieza de estados visuales del formulario principal
         form.reset();
         inputNombre.classList.remove('is-valid');
         inputCantidad.classList.remove('is-valid');
         selectCategoria.classList.remove('is-valid');
 
-        // Levantar el primer modal de confirmación
         const modalElement = document.getElementById('modalCompra');
         if (modalElement) {
             const miModal = new bootstrap.Modal(modalElement);
@@ -120,7 +119,7 @@ function manejarEnvio(evento) {
 }
 
 
-// 5. RENDERIZADO Y CONTADORES EN TIEMPO REAL
+// 5. RENDERIZADO Y CONTADORES
 
 function renderizarCatalogo() {
     if (totalRegistros) {
@@ -143,8 +142,8 @@ function renderizarCatalogo() {
                 <div class="card-body d-flex flex-column justify-content-between">
                     <div>
                         <span class="badge bg-danger mb-2">${prenda.categoria}</span>
-                        <h5 class="card-title fw-bold text-dark mb-1">${prenda.nombre}</h5>
-                        <p class="card-text text-muted small mb-0">Pedido: <strong>${prenda.cantidad}</strong></p>
+                        <h5 class="card-title fw-bold text-dark mb-1">${prenda.prenda}</h5>
+                        <p class="card-text text-muted small mb-0">Cantidad: <strong>${prenda.cantidad}</strong></p>
                     </div>
                     <button class="btn btn-outline-danger btn-sm mt-3 w-100" onclick="eliminarPrenda(${prenda.id})">
                         Eliminar
@@ -162,83 +161,101 @@ window.eliminarPrenda = function(id) {
 };
 
 
-// 6. FLUJO POST-COMPRA (DATOS DE ENVÍO)
+// 6. FLUJO Y GUARDADO EN POSTGRESQL ("CERRAR COMPRA")
 
 window.cerrarCompra = function() {
-    const modalElement = document.getElementById('modalCompra');
-    if (modalElement) {
-        const modalInstance = bootstrap.Modal.getInstance(modalElement);
-        if (modalInstance) modalInstance.hide();
+    if (catalogoPrendas.length === 0) {
+        alert("Agrega al menos una prenda antes de cerrar.");
+        return;
     }
 
-    // Abrir de inmediato el modal de registro de datos de envío
-    setTimeout(() => {
-        const modalEnvioElement = document.getElementById('modalDatosEnvio');
-        if (modalEnvioElement) {
-            const modalEnvio = new bootstrap.Modal(modalEnvioElement);
-            modalEnvio.show();
+    // A. Guardar las prendas en la BD PostgreSQL a través del endpoint /guardar_stock
+    fetch('/guardar_stock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prendas: catalogoPrendas })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Cierra el primer modal
+            const modalElement = document.getElementById('modalCompra');
+            if (modalElement) {
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                if (modalInstance) modalInstance.hide();
+            }
+
+            // Abre el modal para capturar los datos del cliente
+            setTimeout(() => {
+                const modalEnvioElement = document.getElementById('modalDatosEnvio');
+                if (modalEnvioElement) {
+                    const modalEnvio = new bootstrap.Modal(modalEnvioElement);
+                    modalEnvio.show();
+                }
+            }, 400);
+        } else {
+            alert('Error al guardar el stock: ' + data.message);
         }
-    }, 400); 
+    })
+    .catch(error => console.error('Error enviando stock:', error));
 };
 
-// Capturar el envío definitivo del cliente
-document.addEventListener('DOMContentLoaded', () => {
-    const formEnvio = document.getElementById('form-datos-envio');
-    if (formEnvio) {
-        formEnvio.addEventListener('submit', (e) => {
-            e.preventDefault();
 
-            const nombreCli = document.getElementById('envio-nombre').value;
-            const idCli = document.getElementById('envio-id').value;
-            const dirCli = document.getElementById('envio-direccion').value;
-            const telCli = document.getElementById('envio-telefono').value;
+// B. Guardar el pedido final del cliente en PostgreSQL (/guardar_pedido)
+function procesarEnvioBaseDatos(e) {
+    e.preventDefault();
 
-            let resumenPrendas = catalogoPrendas.map(p => `- ${p.nombre} (${p.cantidad})`).join('\n');
+    const nombreCli = document.getElementById('envio-nombre').value;
+    const idCli = document.getElementById('envio-id').value;
+    const dirCli = document.getElementById('envio-direccion').value;
+    const telCli = document.getElementById('envio-telefono').value;
 
-            alert(
-                `🚀 ¡ENVÍO PROGRAMADO CON ÉXITO!\n\n` +
-                `👤 Destinatario: ${nombreCli}\n` +
-                `🆔 Cédula: ${idCli}\n` +
-                `📍 Dirección: ${dirCli}\n` +
-                `📞 Teléfono: ${telCli}\n` +
-                `-----------------------------------------\n` +
-                `📦 DETALLE DEL PEDIDO:\n${resumenPrendas}\n\n` +
-                `¡Tu orden de compra ha sido procesada!`
-            );
+    let resumenPrendas = catalogoPrendas.map(p => `${p.prenda} (${p.cantidad})`).join(', ');
 
-            formEnvio.reset();
+    // Construir formulario para enviar a Flask
+    const formData = new FormData();
+    formData.append('nombre', nombreCli);
+    formData.append('cedula', idCli);
+    formData.append('direccion', dirCli);
+    formData.append('telefono', telCli);
+    formData.append('producto', resumenPrendas);
+
+    fetch('/guardar_pedido', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('🚀 ¡Pedido e inventario guardados exitosamente en PostgreSQL!');
+            
+            // Limpiar formulario y cerrar modal
+            document.getElementById('form-datos-envio').reset();
             const modalEnvioElement = document.getElementById('modalDatosEnvio');
             if (modalEnvioElement) {
                 const modalInstance = bootstrap.Modal.getInstance(modalEnvioElement);
                 if (modalInstance) modalInstance.hide();
             }
 
-            // Limpiar la lista tras completarse la transacción
             catalogoPrendas = [];
             renderizarCatalogo();
-        });
-    }
-});
-document.getElementById('form-contacto').addEventListener('submit', function(event) {
-    const form = event.target;
-    
-    // Validar campos vacíos
-    if (!form.checkValidity()) {
-        event.preventDefault();
-        event.stopPropagation();
-        form.classList.add('was-validated');
-    } else {
-        event.preventDefault(); // Evita el envío real para mostrar el mensaje
-        
-        // Mostrar mensaje de éxito
-        const msgEnvio = document.getElementById('mensaje-envio');
-        msgEnvio.classList.remove('d-none');
-        
-        // Ocultar mensaje después de 3 segundos
-        setTimeout(() => {
-            msgEnvio.classList.add('d-none');
-            form.reset();
-            form.classList.remove('was-validated');
-        }, 3000);
-    }
-});
+        } else {
+            alert('Hubo un problema al guardar el pedido en la base de datos.');
+        }
+    })
+    .catch(error => console.error('Error registrando pedido:', error));
+}
+
+
+// 7. ENVÍO DEL FORMULARIO DE CONTACTO A POSTGRESQL
+
+const formContacto = document.getElementById('form-contacto');
+if (formContacto) {
+    formContacto.addEventListener('submit', function(event) {
+        if (!formContacto.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+            formContacto.classList.add('was-validated');
+        }
+        // Permite que el formulario se envíe a Flask si es válido
+    });
+}
