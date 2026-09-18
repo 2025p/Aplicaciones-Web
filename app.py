@@ -1,24 +1,73 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 
+# Importaciones de Flask-Login y Seguridad
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+
+# Importación del Modelo
+from models import Usuario
+
 # Importación de formularios desde la carpeta /forms
 from forms.producto_form import ProductoForm
 from forms.facturacion_form import FacturacionForm
+from forms.login_form import LoginForm
+from forms.usuario_form import RegistroForm
 
 # Importación centralizada de la conexión a PostgreSQL
 from conexion.conexion import obtener_conexion
 
 app = Flask(__name__)
 
-# Clave obligatoria para la seguridad CSRF y Flask-WTF
+# Clave obligatoria para la seguridad CSRF, Flask-WTF y manejo de Sesiones
 app.config['SECRET_KEY'] = 'mi_clave_secreta_1234'
 
+# ==========================================
+# CONFIGURACIÓN DE FLASK-LOGIN
+# ==========================================
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+login_manager.login_message = "Por favor inicia sesión para acceder a esta sección."
+login_manager.login_message_category = "warning"
 
+@login_manager.user_loader
+def load_user(user_id):
+    """Carga el usuario desde la base de datos para mantener la sesión activa."""
+    conn = None
+    try:
+        conn = obtener_conexion()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, usuario, password FROM usuarios WHERE id = %s;", (user_id,))
+        row = cursor.fetchone()
+        cursor.close()
+        if row:
+            return Usuario(id=row[0], usuario=row[1], password=row[2])
+    except Exception as e:
+        print("Error cargando usuario:", e)
+    finally:
+        if conn:
+            conn.close()
+    return None
+
+
+# ==========================================
+# INICIALIZACIÓN DE LA BASE DE DATOS
+# ==========================================
 def init_db():
     """Inicializa la base de datos PostgreSQL y crea las tablas requeridas si no existen."""
     try:
         conn = obtener_conexion()
         cursor = conn.cursor()
+
+        # Tabla de Usuarios 
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS usuarios (
+                id SERIAL PRIMARY KEY,
+                usuario VARCHAR(50) UNIQUE NOT NULL,
+                password VARCHAR(255) NOT NULL
+            );
+        ''')
 
         # Tabla de Proveedores
         cursor.execute('''
@@ -82,7 +131,7 @@ def init_db():
         conn.commit()
         cursor.close()
         conn.close()
-        print("¡Base de datos inicializada correctamente!")
+        print("¡Base de datos e historial de tablas inicializados correctamente!")
     except Exception as e:
         mensaje_error = str(e).encode('utf-8', errors='ignore').decode('utf-8')
         print(f"\n================ ERROR DE CONEXIÓN ================\n{mensaje_error}\n===================================================\n")
@@ -92,26 +141,103 @@ def init_db():
 init_db()
 
 
-# RUTAS DE NAVEGACIÓN Y VISTAS
+# ==========================================
+# RUTAS DE AUTENTICACIÓN Y REGISTRO
+# ==========================================
 
+@app.route('/registro', methods=['GET', 'POST'])
+def registro():
+    """Registra un nuevo usuario cifrando su contraseña con Hash."""
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+
+    form = RegistroForm()
+    if form.validate_on_submit():
+        usuario_val = form.usuario.data
+        password_val = form.password.data
+        hashed_pw = generate_password_hash(password_val)
+
+        conn = None
+        try:
+            conn = obtener_conexion()
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO usuarios (usuario, password) VALUES (%s, %s);", (usuario_val, hashed_pw))
+            conn.commit()
+            cursor.close()
+
+            flash('¡Usuario registrado con éxito! Ya puedes iniciar sesión.', 'success')
+            return redirect(url_for('login'))
+        except Exception as e:
+            if conn:
+                conn.rollback()
+            flash('Error: El nombre de usuario ya está registrado.', 'danger')
+        finally:
+            if conn:
+                conn.close()
+
+    return render_template('registro.html', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """Autentica las credenciales de usuario mediante check_password_hash."""
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+
+    form = LoginForm()
+    if form.validate_on_submit():
+        usuario_val = form.usuario.data
+        password_val = form.password.data
+
+        conn = None
+        try:
+            conn = obtener_conexion()
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, usuario, password FROM usuarios WHERE usuario = %s;", (usuario_val,))
+            row = cursor.fetchone()
+            cursor.close()
+
+            if row and check_password_hash(row[2], password_val):
+                user_obj = Usuario(id=row[0], usuario=row[1], password=row[2])
+                login_user(user_obj)
+                flash(f'¡Bienvenido/a {user_obj.usuario}!', 'success')
+                return redirect(url_for('dashboard'))
+            else:
+                flash('Usuario o contraseña incorrectos.', 'danger')
+        except Exception as e:
+            flash(f'Error al conectar con la base de datos: {e}', 'danger')
+        finally:
+            if conn:
+                conn.close()
+
+    return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    """Cierra la sesión del usuario actual."""
+    logout_user()
+    flash('Has cerrado sesión correctamente.', 'info')
+    return redirect(url_for('login'))
+
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    """Panel de administración interno protegido."""
+    return render_template('dashboard.html')
+
+
+# ==========================================
+# RUTAS DE NAVEGACIÓN PÚBLICAS Y VISTAS
+# ==========================================
 
 @app.route('/')
 @app.route('/inicio')
 def inicio():
     """Página principal de la tienda."""
     return render_template('index.html')
-
-
-@app.route('/productos')
-def productos():
-    """Lista los productos almacenados en PostgreSQL (SELECT)."""
-    conn = obtener_conexion()
-    cursor = conn.cursor()
-    cursor.execute('SELECT id, nombre, precio, stock FROM productos ORDER BY id ASC')
-    lista_productos = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return render_template('productos.html', productos=lista_productos)
 
 
 @app.route('/catalogo')
@@ -121,23 +247,16 @@ def catalogo():
     return render_template('catalogo.html', form=form)
 
 
-@app.route('/stock')
-def stock():
-    """Muestra la vista de stock/inventario desde la tabla stock o productos."""
-    conn = obtener_conexion()
-    cursor = conn.cursor()
-    cursor.execute('SELECT id, prenda, cantidad, categoria, fecha_registro FROM stock ORDER BY id DESC')
-    lista_stock = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return render_template('stock.html', productos=lista_stock)
+@app.route('/servicios')
+def servicios():
+    """Muestra la vista de servicios complementarios."""
+    return render_template('servicios.html')
 
 
 @app.route('/contacto', methods=['GET', 'POST'])
 def contacto():
     """Muestra la vista de contacto y guarda los mensajes recibidos."""
     if request.method == 'POST':
-        # Permite recibir tanto JSON (fetch/AJAX) como Formulario HTML tradicional
         data = request.get_json(silent=True) or request.form
 
         nombre = data.get('nombre')
@@ -150,8 +269,6 @@ def contacto():
             try:
                 conn = obtener_conexion()
                 cursor = conn.cursor()
-                
-                # INSERT con fecha actual explícita (NOW())
                 cursor.execute('''
                     INSERT INTO contactos (nombre, correo, asunto, mensaje, fecha)
                     VALUES (%s, %s, %s, %s, NOW())
@@ -160,7 +277,6 @@ def contacto():
                 conn.commit()
                 cursor.close()
 
-                # Si la petición vino por AJAX / JSON, responde JSON
                 if request.is_json:
                     return jsonify({'success': True, 'message': '¡Gracias por contactarnos! Tu mensaje ha sido enviado.'})
 
@@ -168,7 +284,7 @@ def contacto():
             except Exception as e:
                 if conn:
                     conn.rollback()
-                print("Error en base de datos al guardar contacto:", e) # Ver error en la terminal de Python
+                print("Error en base de datos al guardar contacto:", e)
                 
                 if request.is_json:
                     return jsonify({'success': False, 'message': f'Error al enviar mensaje: {str(e)}'}), 500
@@ -188,12 +304,91 @@ def contacto():
     return render_template('contacto.html')
 
 
-# RUTAS DE GESTIÓN (CRUD COMPLETO SOBRE POSTGRESQL)
+@app.route('/guardar_pedido', methods=['POST'])
+def guardar_pedido():
+    """Procesa y guarda los datos del pedido enviado desde el catálogo (INSERT)."""
+    nombre = request.form.get('nombre')
+    cedula = request.form.get('cedula')
+    direccion = request.form.get('direccion')
+    telefono = request.form.get('telefono')
+    producto = request.form.get('producto', '')
+    cantidad = request.form.get('cantidad', '')
+    talla = request.form.get('talla', '')
+
+    if nombre and cedula and direccion and telefono:
+        conn = None
+        try:
+            conn = obtener_conexion()
+            cursor = conn.cursor()
+            cursor.execute('''
+                INSERT INTO pedidos (nombre, cedula, direccion, telefono, producto, cantidad, talla) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ''', (nombre, cedula, direccion, telefono, producto, cantidad, talla))
+
+            conn.commit()
+            cursor.close()
+            flash('¡Pedido registrado y enviado a entrega con éxito!', 'success')
+        except Exception as e:
+            if conn:
+                conn.rollback()
+            flash(f'Error al registrar el pedido: {e}', 'danger')
+        finally:
+            if conn:
+                conn.close()
+        return redirect(url_for('catalogo'))
+
+    flash('Hubo un error al procesar tu pedido. Verifica que los campos obligatorios estén llenos.', 'danger')
+    return redirect(url_for('catalogo'))
+
+
+# ==========================================
+# RUTAS PROTEGIDAS CON @login_required (ADMIN)
+# ==========================================
+
+@app.route('/productos')
+
+def productos():
+    """Lista los productos almacenados en PostgreSQL (Requiere Login)."""
+    conn = obtener_conexion()
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, nombre, precio, stock FROM productos ORDER BY id ASC')
+    lista_productos = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('productos.html', productos=lista_productos)
+
+
+@app.route('/stock')
+@login_required
+def stock():
+    """Muestra la vista de stock/inventario (Requiere Login)."""
+    conn = obtener_conexion()
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, prenda, cantidad, categoria, fecha_registro FROM stock ORDER BY id DESC')
+    lista_stock = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('stock.html', productos=lista_stock)
+
+
+@app.route('/pedidos')
+@login_required
+def ver_pedidos():
+    """Lista todos los pedidos recibidos (Requiere Login)."""
+    conn = obtener_conexion()
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, nombre, cedula, direccion, telefono, producto, cantidad, talla, fecha FROM pedidos ORDER BY id DESC')
+    lista_pedidos = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return render_template('pedidos.html', pedidos=lista_pedidos)
 
 
 @app.route('/guardar_stock', methods=['POST'])
+@login_required
 def guardar_stock():
-    """Guarda en lote las prendas ingresadas desde la interfaz de Stock."""
+    """Guarda en lote las prendas ingresadas desde la interfaz de Stock (Requiere Login)."""
     datos = request.get_json()
     prendas = datos.get('prendas', [])
     
@@ -224,8 +419,9 @@ def guardar_stock():
 
 
 @app.route('/formulario_producto', methods=['GET', 'POST'])
+@login_required
 def formulario_producto():
-    """Agrega un nuevo producto mediante WTForms y PostgreSQL (INSERT)."""
+    """Agrega un nuevo producto mediante WTForms (Requiere Login)."""
     form = ProductoForm()
     if form.validate_on_submit():
         nombre = form.nombre.data
@@ -249,8 +445,9 @@ def formulario_producto():
 
 
 @app.route('/editar_producto/<int:id>', methods=['GET', 'POST'])
+@login_required
 def editar_producto(id):
-    """Edita un producto existente (UPDATE)."""
+    """Edita un producto existente (Requiere Login)."""
     conn = obtener_conexion()
     cursor = conn.cursor()
 
@@ -286,8 +483,9 @@ def editar_producto(id):
 
 
 @app.route('/eliminar_producto/<int:id>', methods=['POST'])
+@login_required
 def eliminar_producto(id):
-    """Elimina un producto por su ID (DELETE)."""
+    """Elimina un producto por su ID (Requiere Login)."""
     conn = obtener_conexion()
     cursor = conn.cursor()
     cursor.execute('DELETE FROM productos WHERE id = %s', (id,))
@@ -297,56 +495,6 @@ def eliminar_producto(id):
 
     flash('¡Producto eliminado exitosamente!', 'danger')
     return redirect(url_for('productos'))
-
-
-@app.route('/guardar_pedido', methods=['POST'])
-def guardar_pedido():
-    """Procesa y guarda los datos del pedido enviado desde el modal (INSERT)."""
-    nombre = request.form.get('nombre')
-    cedula = request.form.get('cedula')
-    direccion = request.form.get('direccion')
-    telefono = request.form.get('telefono')
-    producto = request.form.get('producto', '')
-    cantidad = request.form.get('cantidad', '')
-    talla = request.form.get('talla', '')
-
-    if nombre and cedula and direccion and telefono:
-        conn = None
-        try:
-            conn = obtener_conexion()
-            cursor = conn.cursor()
-            cursor.execute('''
-                INSERT INTO pedidos (nombre, cedula, direccion, telefono, producto, cantidad, talla) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
-            ''', (nombre, cedula, direccion, telefono, producto, cantidad, talla))
-
-            conn.commit()
-            cursor.close()
-            flash('¡Pedido registrado y enviado a entrega con éxito!', 'success')
-        except Exception as e:
-            if conn:
-                conn.rollback()
-            flash(f'Error al registrar el pedido: {e}', 'danger')
-        finally:
-            if conn:
-                conn.close()
-        return redirect(url_for('catalogo'))
-
-    flash('Hubo un error al procesar tu pedido. Verifica que los campos obligatorios estén llenos.', 'danger')
-    return redirect(url_for('catalogo'))
-
-
-@app.route('/pedidos')
-def ver_pedidos():
-    """Lista todos los pedidos recibidos (SELECT)."""
-    conn = obtener_conexion()
-    cursor = conn.cursor()
-    cursor.execute('SELECT id, nombre, cedula, direccion, telefono, producto, cantidad, talla, fecha FROM pedidos ORDER BY id DESC')
-    lista_pedidos = cursor.fetchall()
-    cursor.close()
-    conn.close()
-
-    return render_template('pedidos.html', pedidos=lista_pedidos)
 
 
 if __name__ == '__main__':

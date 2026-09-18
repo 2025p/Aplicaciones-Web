@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Registro de Usuario - Ala Moda Express{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow rounded-4 p-4">
+                <h3 class="text-center fw-bold mb-4"><i class="bi bi-person-plus-fill text-danger me-2"></i>Crear Cuenta</h3>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Usuario</label>
+                        {{ form.usuario(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Contraseña</label>
+                        {{ form.password(class="form-control") }}
+                    </div>
+                    {{ form.submit(class="btn btn-danger w-100 fw-bold py-2 mt-2") }}
+                </form>
+                <div class="text-center mt-3">
+                    <small>¿Ya tienes cuenta? <a href="{{ url_for('login') }}">Inicia sesión</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

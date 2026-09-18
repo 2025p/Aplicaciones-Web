@@ -16,8 +16,9 @@ body {
 }
 
 /* --- SECCIÓN HERO --- */
+
 .hero-section {
-    background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('../imagenes/Tienda_Ala_Moda.jpg') no-repeat center center/cover;
+    background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('../imagenes/outfits.jpg') no-repeat center center/cover;
     color: white;
     padding: 100px 20px;
     text-align: center;
@@ -55,3 +56,4 @@ body {
 .border-purple {
     border-color: #C8C2D1 !important; /* Línea divisoria suave para el banner */
 }
+

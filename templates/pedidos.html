@@ -6,9 +6,9 @@
     
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h3 class="fw-bold text-uppercase text-dark mb-0">
-        <i class="bi bi-box-seam me-2 text-danger"></i>Pedidos Registrados (SQLite)
+        <i class="bi bi-box-seam me-2 text-danger"></i>Pedidos Registrados
       </h3>
-      <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-sm fw-bold">
+      <a href="{{ url_for('inicio') }}" class="btn btn-outline-secondary btn-sm fw-bold">
         ← Volver al Inicio
       </a>
     </div>
@@ -32,15 +32,24 @@
           <tbody>
             {% for p in pedidos %}
             <tr>
-              <td><span class="badge bg-secondary">#{{ p['id'] }}</span></td>
-              <td class="fw-bold text-dark">{{ p['nombre'] }}</td>
-              <td>{{ p['cedula'] }}</td>
-              <td><small class="text-muted">{{ p['direccion'] }}</small></td>
-              <td>{{ p['telefono'] }}</td>
-              <td><span class="badge bg-danger">{{ p['producto'] or 'N/A' }}</span></td>
-              <td>{{ p['cantidad'] }} docena(s)</td>
-              <td><span class="badge bg-light text-dark border">{{ p['talla'] or 'Standard' }}</span></td>
-              <td><small class="text-muted">{{ p['fecha'] }}</small></td>
+              <!-- Posición 0: ID -->
+              <td><span class="badge bg-secondary">#{{ p[0] }}</span></td>
+              <!-- Posición 1: Nombre del cliente -->
+              <td class="fw-bold text-dark">{{ p[1] }}</td>
+              <!-- Posición 2: Cédula -->
+              <td>{{ p[2] }}</td>
+              <!-- Posición 3: Dirección -->
+              <td><small class="text-muted">{{ p[3] }}</small></td>
+              <!-- Posición 4: Teléfono -->
+              <td>{{ p[4] }}</td>
+              <!-- Posición 5: Producto -->
+              <td><span class="badge bg-danger">{{ p[5] if p[5] else 'N/A' }}</span></td>
+              <!-- Posición 6: Cantidad -->
+              <td>{{ p[6] }} docena(s)</td>
+              <!-- Posición 7: Talla -->
+              <td><span class="badge bg-light text-dark border">{{ p[7] if p[7] else 'Standard' }}</span></td>
+              <!-- Posición 8: Fecha -->
+              <td><small class="text-muted">{{ p[8] }}</small></td>
             </tr>
             {% endfor %}
           </tbody>

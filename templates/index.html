@@ -19,12 +19,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-muted p-0 d-flex align-items-center" href="{{ url_for('productos') }}">
+                    <a class="nav-link text-muted p-0 d-flex align-items-center" href="{{ url_for('servicios') }}">
                         <i class="bi bi-chevron-right me-1 small"></i> Productos y Servicios
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-muted p-0 d-flex align-items-center" href="{{ url_for('productos') }}">
+                    <a class="nav-link text-muted p-0 d-flex align-items-center" href="{{ url_for('servicios') }}">
                         <i class="bi bi-chevron-right me-1 small"></i> Servicio al Cliente
                     </a>
                 </li>
@@ -38,17 +38,19 @@
     </aside>
 
     <!-- COLUMNA DERECHA: BANNER Y CONTENIDO (Ancho 9) -->
-    <div class="col-12 col-md-9">
-        
-        <!-- Banner de Inicio (Hero Section) -->
-        <section id="inicio" class="hero-section rounded shadow-sm mb-4">
-            <div class="container py-3">
-                <h1 class="display-5 fw-bold text-uppercase">Sistema de Compras Online de Outfits</h1>
-                <h2 class="h4 mb-4 fw-light">¡Tu estilo, a un clic!</h2>
-                <p class="lead fs-6 max-w-75 mx-auto opacity-90">Vístete con moda y elegancia. Diseñamos prendas de fina calidad, pensadas en tu salud, confort y estilo único. ¡La variedad es nuestra mejor presentación! Un gusto poder atenderte.</p>
-                <a href="{{ url_for('productos') }}" class="btn btn-danger btn-lg mt-2 fw-bold px-4 fs-6">¡Te esperamos!</a>
-            </div>
-        </section>
+<div class="col-12 col-md-9">
+    
+    <!-- Banner de Inicio sin clases duplicadas -->
+    <section id="inicio" class="mb-4">
+        <div class="rounded-4 text-white text-center p-5 position-relative overflow-hidden" 
+             style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ url_for('static', filename='imagenes/outfits.jpg') }}') no-repeat center center / cover !important; min-height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            
+            <h1 class="display-4 fw-bold mb-3">SISTEMA DE COMPRAS ONLINE DE OUTFITS</h1>
+            <h3 class="fw-normal mb-3">¡Tu estilo, a un clic!</h3>
+            <p class="lead mb-4" style="max-width: 700px;">Vístete con moda y elegancia. Diseñamos prendas de fina calidad, pensadas en tu salud, confort y estilo único. ¡La variedad es nuestra mejor presentación!</p>
+            <a href="{{ url_for('productos') }}" class="btn btn-danger btn-lg px-4 fw-bold shadow">¡Te esperamos!</a>
+        </div>
+    </section>
 
              <!-- Moda y Estilo -->
     <section id="moda-estilo" class="bg-white rounded p-4 shadow-sm mb-4">

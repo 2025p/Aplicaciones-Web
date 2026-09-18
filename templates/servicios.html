@@ -1,0 +1,366 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .tarjeta-servicio {
+        background: #f8f9fa;
+        transition: all 0.3s ease;
+        border-top: 3px solid #0d6efd !important;
+    }
+    .tarjeta-servicio:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(13,110,253,0.15) !important;
+        background: #ffffff;
+    }
+</style>
+
+<!-- ======================================================= -->
+<!-- NUESTROS PRODUCTOS (CATÁLOGO PÚBLICO DE ROPA)           -->
+<!-- ======================================================= -->
+<section id="productos" class="bg-white rounded p-4 shadow-sm mb-4 border-start border-4 border-danger">
+    <div class="text-center mb-4">
+        <h3 class="fw-bold text-uppercase text-dark mb-1">
+            <i class="bi bi-bag-heart-fill text-danger me-2"></i>Nuestros Productos
+        </h3>
+        <p class="text-muted small mb-0">(Haz clic en cualquier prenda para ver fotos del catálogo)</p>
+    </div>
+    
+    <div class="row g-3 justify-content-center">
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 p-3 shadow-sm text-center border rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalPantalonesPremium" style="cursor: pointer;">
+                <h6 class="fw-bold text-dark mb-1">Pantalones Premium</h6>
+                <p class="text-muted small mb-0">Prenda de vestir con corte moderno y materiales de alta calidad.</p>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 p-3 shadow-sm text-center border rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalPantalonesCapri" style="cursor: pointer;">
+                <h6 class="fw-bold text-dark mb-1">Pantalones Capri</h6>
+                <p class="text-muted small mb-0">Prenda de dama elegante con varios diseños y de buena calidad.</p>
+            </div>
+        </div>  
+
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 p-3 shadow-sm text-center border rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalPantalonesAA" style="cursor: pointer;">
+                <h6 class="fw-bold text-dark mb-1">Pantalones AA</h6>
+                <p class="text-muted small mb-0">Pantalones con diseños urbanos para damas y caballeros.</p>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 p-3 shadow-sm text-center border rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalCamisasPolo" style="cursor: pointer;">
+                <h6 class="fw-bold text-dark mb-1">Camisas Polo</h6>
+                <p class="text-muted small mb-0">Camisas clásicas para damas y caballeros. Nunca pierdas tu estilo.</p>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 p-3 shadow-sm text-center border rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalBlusaVerano" style="cursor: pointer;">
+                <h6 class="fw-bold text-dark mb-1">Blusa de Verano</h6>
+                <p class="text-muted small mb-0">Modernas y cómodas para cualquier ocasión.</p>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 p-3 shadow-sm text-center border rounded-3 tarjeta-interactiva" data-bs-toggle="modal" data-bs-target="#modalBlusaEstampada" style="cursor: pointer;">
+                <h6 class="fw-bold text-dark mb-1">Blusa Estampada</h6>
+                <p class="text-muted small mb-0">Varios diseños disponibles en todas las tallas para elegir.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================= -->
+<!-- MODALES INTERACTIVOS DE LAS PRENDAS                     -->
+<!-- ======================================================= -->
+<div class="modal fade" id="modalPantalonesPremium" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold">Catálogo: Pantalones Premium</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Premiun.webp') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Jean Urban Premium</span>
+                    </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Pantalones-premiun.jfif') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Pantalón Classic Denim</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalPantalonesCapri" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold">Catálogo: Pantalones Capri</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Capri.webp') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Capri Estilizado</span>
+                    </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Capri-1.jpg') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Capri Casual</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalPantalonesAA" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold">Catálogo: Pantalones AA</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Pantalon-urban.jfif') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Jogger Urbano AA</span>
+                    </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Pant-urban.jfif') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Pantalón Cargo Streetwear</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalCamisasPolo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold">Catálogo: Camisas Polo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Pol.jfif') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Polo Algodón Pima</span>
+                    </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Polo.jfif') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Polo Ejecutivo Sport</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalBlusaVerano" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold">Catálogo: Blusas de Verano</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Veran.jpg') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Blusa Fresca Lino</span>
+                    </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Verano.jfif') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Top Casual</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalBlusaEstampada" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold">Catálogo: Blusas Estampadas</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Floreada.webp') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Blusa Estampado Floral</span>
+                    </div>
+                    <div class="col-6">
+                        <img src="{{ url_for('static', filename='imagenes/Esampada.jpg') }}" class="img-fluid rounded shadow-sm">
+                        <span class="fw-bold d-block small text-dark mt-1">Blusa Patrón Geométrico</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================= -->
+<!-- SECCIÓN DE SERVICIOS                                    -->
+<!-- ======================================================= -->
+<section id="servicios" class="bg-white rounded p-4 shadow-sm mb-4 border-start border-4 border-primary mt-2">
+    <div class="text-center mb-4">
+        <h3 class="fw-bold text-uppercase text-dark mb-1">
+            <i class="bi bi-truck text-primary me-2"></i>Nuestros Servicios
+        </h3>
+        <p class="text-muted small mb-0">Servicios complementarios de logística y soporte para nuestros clientes</p>
+    </div>
+
+    <div class="row g-3 justify-content-center">
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="card h-100 p-3 shadow-sm text-center border rounded-3 tarjeta-servicio" data-bs-toggle="modal" data-bs-target="#modalServientrega" style="cursor: pointer;">
+                <div class="d-flex align-items-center justify-content-center mb-2">
+                    <i class="bi bi-box-seam text-primary fs-4 me-2"></i>
+                    <h6 class="fw-bold text-primary mb-0">Servientrega Express</h6>
+                </div>
+                <p class="text-muted small mb-0">Entrega a domicilio rápida que garantiza tu paquete en óptimas condiciones en 24/48 horas.</p>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="card h-100 p-3 shadow-sm text-center border rounded-3 tarjeta-servicio" data-bs-toggle="modal" data-bs-target="#modalPedidos247" style="cursor: pointer;">
+                <div class="d-flex align-items-center justify-content-center mb-2">
+                    <i class="bi bi-clock-history text-primary fs-4 me-2"></i>
+                    <h6 class="fw-bold text-primary mb-0">Pedidos Online 24/7</h6>
+                </div>
+                <p class="text-muted small mb-0">Gestiona tus compras y consultas a cualquier hora a través de nuestra plataforma web.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================= -->
+<!-- SERVICIO AL CLIENTE & RASTREO                            -->
+<!-- ======================================================= -->
+<div class="bg-white rounded p-4 shadow-sm mb-4 border-start border-4 border-danger">
+  <div class="mb-3">
+    <h5 class="fw-bold text-uppercase text-dark mb-1" style="letter-spacing: 0.5px;">
+      <i class="bi bi-headset me-2 text-danger"></i>SERVICIO AL CLIENTE
+    </h5>
+    <p class="text-muted small mb-0">Rastrea tu paquete o resuelve tus dudas frecuentes al instante.</p>
+  </div>
+
+  <div class="row g-4 align-items-start">
+    <div class="col-md-6">
+      <div class="p-3 bg-light rounded border h-100">
+        <h6 class="fw-bold text-uppercase text-dark mb-2 small">Hola, ¿En qué podemos ayudarte hoy?</h6>
+        <p class="text-muted small mb-3">Ingresa tu número de guía para consultar el estado de tu pedido.</p>
+        
+        <form>
+          <label for="numeroPedido" class="form-label small fw-semibold text-secondary">Número de pedido <span class="text-danger">*</span></label>
+          <div class="input-group input-group-sm mb-2">
+            <input type="text" id="numeroPedido" class="form-control rounded-0" placeholder="ej. 1234567890123-01" required>
+            <button type="button" class="btn btn-dark rounded-0 fw-bold px-3">RASTREAR</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <h6 class="fw-bold text-dark mb-2 small text-uppercase">Preguntas Frecuentes (FAQ)</h6>
+      <div class="accordion accordion-flush small" id="faqAccordion">
+        
+        <div class="accordion-item border-top">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed py-2 px-0 fw-semibold text-dark small" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+              ¿QUÉ MEDIOS DE PAGO SE ACEPTAN?
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body px-0 text-muted small py-2">
+              Aceptamos tarjetas de crédito, débito, transferencias y pagos contra entrega.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item border-top">
+          <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed py-2 px-0 fw-semibold text-dark small" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+              ¿CUÁLES SON LOS MÉTODOS DE ENVÍO?
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body px-0 text-muted small py-2">
+              Envíos a todo el país vía Servientrega Express y entregas directas urbanas.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item border-top">
+          <h2 class="accordion-header" id="headingThree">
+            <button class="accordion-button collapsed py-2 px-0 fw-semibold text-dark small" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+              ¿CÓMO SABER CUÁNDO RECIBIRÉ MI PEDIDO?
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body px-0 text-muted small py-2">
+              Ingresa tu número de pedido para ver la fecha estimada en tiempo real.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item border-top border-bottom">
+          <h2 class="accordion-header" id="headingFour">
+            <button class="accordion-button collapsed py-2 px-0 fw-semibold text-dark small" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+              ¿CUÁNDO REEMBOLSAN UNA DEVOLUCIÓN?
+            </button>
+          </h2>
+          <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body px-0 text-muted small py-2">
+              Se procesan en 3 a 5 días hábiles tras la recepción de la prenda.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALES DE INFORMACIÓN DE SERVICIOS -->
+<div class="modal fade" id="modalServientrega" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold">Envíos Rápidos a Todo el País</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="{{ url_for('static', filename='imagenes/Servientrega.webp') }}" class="img-fluid rounded mb-2 shadow-sm" style="max-height: 200px;">
+                <p class="fw-bold text-dark mb-0">Garantizamos que tu paquete llegue en óptimas condiciones en un plazo de 24 a 48 horas laborales.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalPedidos247" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold">Atención Continua 24/7</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="{{ url_for('static', filename='imagenes/24-7-service.jpg') }}" class="img-fluid rounded mb-2 shadow-sm" style="max-height: 200px;">
+                <p class="fw-bold text-dark mb-0">Nuestra plataforma está lista para recibir tus órdenes a cualquier hora.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

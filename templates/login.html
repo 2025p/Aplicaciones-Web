@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Iniciar Sesión - Ala Moda Express{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center position-relative py-5" 
+     style="background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('{{ url_for('static', filename='imagenes/fondo.jpeg') }}') no-repeat center center/cover; min-height: 80vh;">
+    
+    <!-- Tarjeta con mayor transparencia -->
+    <div class="card shadow-lg p-4 rounded-4" 
+         style="max-width: 420px; width: 100%; background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); z-index: 2;">
+        
+        <h3 class="text-center fw-bold mb-4 text-dark">
+            <i class="bi bi-box-arrow-in-right text-danger me-2"></i>Iniciar Sesión
+        </h3>
+        
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                <label class="form-label fw-bold text-dark">Usuario</label>
+                {{ form.usuario(class="form-control", placeholder="Ingresa tu usuario", style="background: rgba(255, 255, 255, 0.75); border: 1px solid rgba(0,0,0,0.1);") }}
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label fw-bold text-dark">Contraseña</label>
+                {{ form.password(class="form-control", placeholder="Ingresa tu contraseña", style="background: rgba(255, 255, 255, 0.75); border: 1px solid rgba(0,0,0,0.1);") }}
+            </div>
+            
+            {{ form.submit(class="btn btn-dark w-100 fw-bold py-2 mt-2") }}
+        </form>
+
+        <div class="text-center mt-3">
+            <small class="fw-bold text-dark">¿No tienes cuenta? <a href="{{ url_for('registro') }}" class="text-primary fw-bold">Regístrate aquí</a></small>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

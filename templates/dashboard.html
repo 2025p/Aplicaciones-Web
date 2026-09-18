@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Panel de Control{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <h2>Bienvenido al Panel de Control, <strong>{{ current_user.usuario }}</strong>! 👋</h2>
+    <p class="text-muted">Has ingresado al sistema de manera segura con sesión activa.</p>
+</div>
+{% endblock %}
