@@ -1,11 +1,22 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
-
-# Importaciones de Flask-Login y Seguridad
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# Importación del Modelo
+# 1. Crear la aplicación Flask primero
+app = Flask(__name__)
+
+# 2. Configuración de la base de datos
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://usuario:password@localhost:5432/tu_db')
+
+if app.config['SQLALCHEMY_DATABASE_URI'].startswith("postgres://"):
+    app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace("postgres://", "postgresql://", 1)
+
+# 3. Inicializar SQLAlchemy (esto define 'db')
+db = SQLAlchemy(app)
+
+# 4. Importar modelos (después de crear db)
 from models import Usuario
 
 # Importación de formularios desde la carpeta /forms
@@ -496,18 +507,9 @@ def eliminar_producto(id):
     flash('¡Producto eliminado exitosamente!', 'danger')
     return redirect(url_for('productos'))
 
-import os
 
-# Configuración de la base de datos
-# Lee la variable de Render; si no existe, usa la local como respaldo
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://usuario:password@localhost:5432/tu_db')
-
-# Si Render entrega 'postgres://', SQLAlchemy requiere 'postgresql://'
-if app.config['SQLALCHEMY_DATABASE_URI'].startswith("postgres://"):
-    app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace("postgres://", "postgresql://", 1)
-
-with app.app_context():
-    db.create_all()
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
