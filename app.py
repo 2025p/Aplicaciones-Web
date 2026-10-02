@@ -315,7 +315,12 @@ def contacto():
     return render_template('contacto.html')
 
 
+# ==========================================
+# FLUJO DE COMPRAS (CLIENTE AUTH)
+# ==========================================
+
 @app.route('/guardar_pedido', methods=['POST'])
+@login_required
 def guardar_pedido():
     """Procesa y guarda los datos del pedido enviado desde el catálogo (INSERT)."""
     nombre = request.form.get('nombre')
@@ -325,6 +330,7 @@ def guardar_pedido():
     producto = request.form.get('producto', '')
     cantidad = request.form.get('cantidad', '')
     talla = request.form.get('talla', '')
+    usuario_id = getattr(current_user, 'id', None)
 
     if nombre and cedula and direccion and telefono:
         conn = None
@@ -332,13 +338,14 @@ def guardar_pedido():
             conn = obtener_conexion()
             cursor = conn.cursor()
             cursor.execute('''
-                INSERT INTO pedidos (nombre, cedula, direccion, telefono, producto, cantidad, talla) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
-            ''', (nombre, cedula, direccion, telefono, producto, cantidad, talla))
+                INSERT INTO pedidos (nombre, cedula, direccion, telefono, producto, cantidad, talla, usuario_id) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            ''', (nombre, cedula, direccion, telefono, producto, cantidad, talla, usuario_id))
 
             conn.commit()
             cursor.close()
-            flash('¡Pedido registrado y enviado a entrega con éxito!', 'success')
+            flash('¡Pedido registrado! Revisa o modifica los detalles de tu orden.', 'success')
+            return redirect(url_for('mis_pedidos'))
         except Exception as e:
             if conn:
                 conn.rollback()
@@ -352,14 +359,37 @@ def guardar_pedido():
     return redirect(url_for('catalogo'))
 
 
+@app.route('/mis_pedidos')
+@login_required
+def mis_pedidos():
+    """Muestra los pedidos realizados por el usuario actual."""
+    conn = obtener_conexion()
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT id, producto, cantidad, talla, direccion, telefono, fecha 
+        FROM pedidos 
+        WHERE usuario_id = %s OR cedula = %s 
+        ORDER BY id DESC
+    ''', (getattr(current_user, 'id', None), getattr(current_user, 'cedula', '')))
+    
+    pedidos_usuario = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('mis_pedidos.html', pedidos=pedidos_usuario)
+
+
 # ==========================================
-# RUTAS PROTEGIDAS CON @login_required (ADMIN)
+# RUTAS PROTEGIDAS CON @login_required (SOLO ADMIN)
 # ==========================================
 
 @app.route('/productos')
-
+@login_required
 def productos():
-    """Lista los productos almacenados en PostgreSQL (Requiere Login)."""
+    """Lista los productos almacenados en PostgreSQL (Requiere Admin)."""
+    if getattr(current_user, 'rol', 'cliente') != 'admin':
+        flash('Acceso denegado: Esta sección es exclusiva para administradores.', 'danger')
+        return redirect(url_for('catalogo'))
+
     conn = obtener_conexion()
     cursor = conn.cursor()
     cursor.execute('SELECT id, nombre, precio, stock FROM productos ORDER BY id ASC')
@@ -372,7 +402,11 @@ def productos():
 @app.route('/stock')
 @login_required
 def stock():
-    """Muestra la vista de stock/inventario (Requiere Login)."""
+    """Muestra la vista de stock/inventario (Requiere Admin)."""
+    if getattr(current_user, 'rol', 'cliente') != 'admin':
+        flash('Acceso denegado: Esta sección es exclusiva para administradores.', 'danger')
+        return redirect(url_for('catalogo'))
+
     conn = obtener_conexion()
     cursor = conn.cursor()
     cursor.execute('SELECT id, prenda, cantidad, categoria, fecha_registro FROM stock ORDER BY id DESC')
@@ -385,7 +419,11 @@ def stock():
 @app.route('/pedidos')
 @login_required
 def ver_pedidos():
-    """Lista todos los pedidos recibidos (Requiere Login)."""
+    """Lista todos los pedidos recibidos (Requiere Admin)."""
+    if getattr(current_user, 'rol', 'cliente') != 'admin':
+        flash('Acceso denegado: Esta sección es exclusiva para administradores.', 'danger')
+        return redirect(url_for('catalogo'))
+
     conn = obtener_conexion()
     cursor = conn.cursor()
     cursor.execute('SELECT id, nombre, cedula, direccion, telefono, producto, cantidad, talla, fecha FROM pedidos ORDER BY id DESC')
@@ -399,7 +437,10 @@ def ver_pedidos():
 @app.route('/guardar_stock', methods=['POST'])
 @login_required
 def guardar_stock():
-    """Guarda en lote las prendas ingresadas desde la interfaz de Stock (Requiere Login)."""
+    """Guarda en lote las prendas ingresadas desde la interfaz de Stock (Requiere Admin)."""
+    if getattr(current_user, 'rol', 'cliente') != 'admin':
+        return jsonify({'success': False, 'message': 'No tienes permisos de administrador.'}), 403
+
     datos = request.get_json()
     prendas = datos.get('prendas', [])
     
@@ -432,7 +473,11 @@ def guardar_stock():
 @app.route('/formulario_producto', methods=['GET', 'POST'])
 @login_required
 def formulario_producto():
-    """Agrega un nuevo producto mediante WTForms (Requiere Login)."""
+    """Agrega un nuevo producto mediante WTForms (Requiere Admin)."""
+    if getattr(current_user, 'rol', 'cliente') != 'admin':
+        flash('Acceso denegado.', 'danger')
+        return redirect(url_for('catalogo'))
+
     form = ProductoForm()
     if form.validate_on_submit():
         nombre = form.nombre.data
@@ -458,7 +503,11 @@ def formulario_producto():
 @app.route('/editar_producto/<int:id>', methods=['GET', 'POST'])
 @login_required
 def editar_producto(id):
-    """Edita un producto existente (Requiere Login)."""
+    """Edita un producto existente (Requiere Admin)."""
+    if getattr(current_user, 'rol', 'cliente') != 'admin':
+        flash('Acceso denegado.', 'danger')
+        return redirect(url_for('catalogo'))
+
     conn = obtener_conexion()
     cursor = conn.cursor()
 
@@ -477,15 +526,16 @@ def editar_producto(id):
 
     form = ProductoForm()
     if form.validate_on_submit():
-        cursor.execute(
-            'UPDATE productos SET nombre = %s, precio = %s, stock = %s WHERE id = %s',
-            (form.nombre.data, form.precio.data, form.stock.data, id)
-        )
-        conn.commit()
-        cursor.close()
-        conn.close()
-
-        flash('¡Producto actualizado exitosamente!', 'info')
+        try:
+            cursor.execute(
+                'UPDATE productos SET nombre = %s, precio = %s, stock = %s WHERE id = %s',
+                (form.nombre.data, form.precio.data, form.stock.data, id)
+            )
+            conn.commit()
+            flash('¡Producto actualizado exitosamente!', 'info')
+        finally:
+            cursor.close()
+            conn.close()
         return redirect(url_for('productos'))
 
     cursor.close()
@@ -496,7 +546,11 @@ def editar_producto(id):
 @app.route('/eliminar_producto/<int:id>', methods=['POST'])
 @login_required
 def eliminar_producto(id):
-    """Elimina un producto por su ID (Requiere Login)."""
+    """Elimina un producto por su ID (Requiere Admin)."""
+    if getattr(current_user, 'rol', 'cliente') != 'admin':
+        flash('Acceso denegado.', 'danger')
+        return redirect(url_for('catalogo'))
+
     conn = obtener_conexion()
     cursor = conn.cursor()
     cursor.execute('DELETE FROM productos WHERE id = %s', (id,))
@@ -506,7 +560,6 @@ def eliminar_producto(id):
 
     flash('¡Producto eliminado exitosamente!', 'danger')
     return redirect(url_for('productos'))
-
 
 
 if __name__ == '__main__':

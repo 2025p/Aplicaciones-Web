@@ -92,12 +92,19 @@
                     <li class="nav-item"><a href="{{ url_for('servicios') }}" class="nav-link text-muted">SERVICIOS</a></li>
                     <li class="nav-item"><a href="{{ url_for('contacto') }}" class="nav-link text-muted">CONTACTO</a></li>
 
-                    <!-- ENLACES PRIVADOS (Solo si el usuario Inició Sesión) -->
+                    <!-- ENLACES SEGÚN ROL -->
                     {% if current_user.is_authenticated %}
-                        <li class="nav-item"><a href="{{ url_for('dashboard') }}" class="nav-link text-primary fw-bold">DASHBOARD</a></li>
-                        <li class="nav-item"><a href="{{ url_for('productos') }}" class="nav-link text-muted">INVENTARIOS</a></li>
-                        <li class="nav-item"><a href="{{ url_for('stock') }}" class="nav-link text-muted">STOCK</a></li>
-                        <li class="nav-item"><a href="{{ url_for('ver_pedidos') }}" class="nav-link text-muted">PEDIDOS</a></li>
+                        {% if getattr(current_user, 'rol', 'cliente') == 'admin' %}
+                            <!-- VISTA EXCLUSIVA PARA ADMINISTRADORES -->
+                            <li class="nav-item"><a href="{{ url_for('dashboard') }}" class="nav-link text-primary fw-bold">DASHBOARD</a></li>
+                            <li class="nav-item"><a href="{{ url_for('productos') }}" class="nav-link text-muted">INVENTARIOS</a></li>
+                            <li class="nav-item"><a href="{{ url_for('stock') }}" class="nav-link text-muted">STOCK</a></li>
+                            <li class="nav-item"><a href="{{ url_for('ver_pedidos') }}" class="nav-link text-muted">PEDIDOS</a></li>
+                        {% else %}
+                            <!-- VISTA EXCLUSIVA PARA CLIENTES -->
+                            <li class="nav-item"><a href="{{ url_for('mis_pedidos') }}" class="nav-link text-success fw-bold"><i class="bi bi-bag-check me-1"></i>MIS PEDIDOS</a></li>
+                        {% endif %}
+
                         <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
                             <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm rounded-pill px-3">
                                 SALIR ({{ current_user.usuario }})
@@ -117,6 +124,7 @@
         </div>
     </nav>
 </header>
+
     <!-- MENSAJES FLASH DE FLASK -->
     <main class="container py-4">
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -162,8 +170,16 @@
 
     <!-- Script JavaScript para Funcionalidades de Modales y Pedidos -->
     <script>
+        // Evaluar sesión activa desde Flask
+        const usuarioAutenticado = {% if current_user.is_authenticated %}true{% else %}false{% endif %};
+
         // Función para abrir el modal del carrito desde los modales de catálogo
         function abrirCarrito(nombreProducto) {
+            if (!usuarioAutenticado) {
+                window.location.href = "{{ url_for('login') }}";
+                return;
+            }
+
             document.getElementById('producto-nombre').value = nombreProducto;
             
             // Cerrar modales de surtido abiertos
@@ -198,7 +214,7 @@
 
             // Cerrar modal carrito
             const modalCarritoEl = document.getElementById('modalCarrito');
-            const modalCarritoInstance = bootstrap.Modal.getInstance(modalCarritoEl);
+            modalCarritoInstance = bootstrap.Modal.getInstance(modalCarritoEl);
             if (modalCarritoInstance) modalCarritoInstance.hide();
 
             // Abrir modal de datos de envío
