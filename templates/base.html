@@ -69,6 +69,7 @@
 <body>
 
    <!-- MENÚ DE NAVEGACIÓN -->
+<!-- MENÚ DE NAVEGACIÓN REVISADO -->
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
         <div class="container d-flex justify-content-between align-items-center">
@@ -86,22 +87,22 @@
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="nav nav-pills flex-column flex-lg-row mt-3 mt-lg-0 align-items-center">
-                    <!-- ENLACES PÚBLICOS (Visibles siempre) -->
+                    <!-- ENLACES PÚBLICOS (Visibles para todos) -->
                     <li class="nav-item"><a href="{{ url_for('inicio') }}" class="nav-link text-dark fw-bold">INICIO</a></li>
                     <li class="nav-item"><a href="{{ url_for('catalogo') }}" class="nav-link text-muted">CATÁLOGO</a></li>
                     <li class="nav-item"><a href="{{ url_for('servicios') }}" class="nav-link text-muted">SERVICIOS</a></li>
                     <li class="nav-item"><a href="{{ url_for('contacto') }}" class="nav-link text-muted">CONTACTO</a></li>
 
-                    <!-- ENLACES SEGÚN ROL -->
+                    <!-- ENLACES SEGÚN ROL DE USUARIO -->
                     {% if current_user.is_authenticated %}
-                        {% if getattr(current_user, 'rol', 'cliente') == 'admin' %}
-                            <!-- VISTA EXCLUSIVA PARA ADMINISTRADORES -->
+                        {% if current_user.rol == 'admin' %}
+                            <!-- VISTA EXCLUSIVA ADMINISTRADOR -->
                             <li class="nav-item"><a href="{{ url_for('dashboard') }}" class="nav-link text-primary fw-bold">DASHBOARD</a></li>
                             <li class="nav-item"><a href="{{ url_for('productos') }}" class="nav-link text-muted">INVENTARIOS</a></li>
                             <li class="nav-item"><a href="{{ url_for('stock') }}" class="nav-link text-muted">STOCK</a></li>
                             <li class="nav-item"><a href="{{ url_for('ver_pedidos') }}" class="nav-link text-muted">PEDIDOS</a></li>
                         {% else %}
-                            <!-- VISTA EXCLUSIVA PARA CLIENTES -->
+                            <!-- VISTA EXCLUSIVA CLIENTE/USUARIOS REGULARES -->
                             <li class="nav-item"><a href="{{ url_for('mis_pedidos') }}" class="nav-link text-success fw-bold"><i class="bi bi-bag-check me-1"></i>MIS PEDIDOS</a></li>
                         {% endif %}
 
@@ -111,7 +112,7 @@
                             </a>
                         </li>
                     {% else %}
-                        <!-- ENLACES DE SESIÓN (Solo si NO ha iniciado sesión) -->
+                        <!-- VISTA PÚBLICA (NO AUTENTICADO) -->
                         <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
                             <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3">INICIAR SESIÓN</a>
                         </li>
@@ -170,57 +171,77 @@
 
     <!-- Script JavaScript para Funcionalidades de Modales y Pedidos -->
     <script>
-        // Evaluar sesión activa desde Flask
-        const usuarioAutenticado = {% if current_user.is_authenticated %}true{% else %}false{% endif %};
+    // Evaluar sesión activa desde Flask
+    const usuarioAutenticado = {% if current_user.is_authenticated %}true{% else %}false{% endif %};
 
-        // Función para abrir el modal del carrito desde los modales de catálogo
-        function abrirCarrito(nombreProducto) {
-            if (!usuarioAutenticado) {
-                window.location.href = "{{ url_for('login') }}";
-                return;
-            }
+    // Función para abrir el modal del carrito desde los botones del catálogo
+    function abrirCarrito(nombreProducto) {
+        // Redirigir al login si no hay sesión activa
+        if (!usuarioAutenticado) {
+            window.location.href = "{{ url_for('login') }}";
+            return;
+        }
 
-            document.getElementById('producto-nombre').value = nombreProducto;
-            
-            // Cerrar modales de surtido abiertos
-            const modalesAbiertos = document.querySelectorAll('.modal.show');
-            modalesAbiertos.forEach(modal => {
-                const modalInstance = bootstrap.Modal.getInstance(modal);
-                if (modalInstance) modalInstance.hide();
-            });
+        const inputNombre = document.getElementById('producto-nombre');
+        if (inputNombre) {
+            inputNombre.value = nombreProducto;
+        }
 
-            // Abrir el modal del carrito
-            const modalCarrito = new bootstrap.Modal(document.getElementById('modalCarrito'));
+        // Cerrar modales que estén abiertos actualmente
+        const modalesAbiertos = document.querySelectorAll('.modal.show');
+        modalesAbiertos.forEach(modal => {
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            if (modalInstance) modalInstance.hide();
+        });
+
+        // Abrir el modal de selección de cantidad/talla
+        const elModalCarrito = document.getElementById('modalCarrito');
+        if (elModalCarrito) {
+            const modalCarrito = new bootstrap.Modal(elModalCarrito);
             modalCarrito.show();
         }
+    }
 
-        // Función para confirmar la cantidad/talla y pasar al modal de datos de envío
-        function confirmarPedido() {
-            const cantidad = document.getElementById('carrito-cantidad').value;
-            const talla = document.getElementById('carrito-talla').value;
-            const producto = document.getElementById('producto-nombre').value;
-            const errorCarrito = document.getElementById('error-carrito');
+    // Función para confirmar la cantidad/talla y pasar al modal de envío
+    function confirmarPedido() {
+        const inputCantidad = document.getElementById('carrito-cantidad');
+        const inputTalla = document.getElementById('carrito-talla');
+        const inputProducto = document.getElementById('producto-nombre');
+        const errorCarrito = document.getElementById('error-carrito');
 
-            if (!cantidad || !talla) {
-                errorCarrito.classList.remove('d-none');
-                return;
-            }
-            errorCarrito.classList.add('d-none');
+        const cantidad = inputCantidad ? inputCantidad.value : '';
+        const talla = inputTalla ? inputTalla.value : '';
+        const producto = inputProducto ? inputProducto.value : '';
 
-            // Asignar los valores a los campos ocultos del formulario de envío
-            document.getElementById('envio-producto').value = producto;
-            document.getElementById('envio-cantidad').value = cantidad;
-            document.getElementById('envio-talla').value = talla;
+        if (!cantidad || !talla) {
+            if (errorCarrito) errorCarrito.classList.remove('d-none');
+            return;
+        }
+        if (errorCarrito) errorCarrito.classList.add('d-none');
 
-            // Cerrar modal carrito
-            const modalCarritoEl = document.getElementById('modalCarrito');
-            modalCarritoInstance = bootstrap.Modal.getInstance(modalCarritoEl);
+        // Asignar los valores a los campos ocultos del formulario de envío
+        const envioProd = document.getElementById('envio-producto');
+        const envioCant = document.getElementById('envio-cantidad');
+        const envioTalla = document.getElementById('envio-talla');
+
+        if (envioProd) envioProd.value = producto;
+        if (envioCant) envioCant.value = cantidad;
+        if (envioTalla) envioTalla.value = talla;
+
+        // Cerrar modal del carrito de forma segura
+        const modalCarritoEl = document.getElementById('modalCarrito');
+        if (modalCarritoEl) {
+            const modalCarritoInstance = bootstrap.Modal.getInstance(modalCarritoEl);
             if (modalCarritoInstance) modalCarritoInstance.hide();
+        }
 
-            // Abrir modal de datos de envío
-            const modalEnvio = new bootstrap.Modal(document.getElementById('modalDatosEnvio'));
+        // Abrir modal de datos de envío
+        const modalEnvioEl = document.getElementById('modalDatosEnvio');
+        if (modalEnvioEl) {
+            const modalEnvio = new bootstrap.Modal(modalEnvioEl);
             modalEnvio.show();
         }
-    </script>
+    }
+</script>
 </body>
 </html>
