@@ -172,35 +172,9 @@
     <!-- Script JavaScript para Funcionalidades de Modales y Pedidos -->
     <script>
     // Evaluar sesión activa desde Flask
-    const usuarioAutenticado = {% if current_user.is_authenticated %}true{% else %}false{% endif %};
+    const usuarioAutenticado = {{ current_user.is_authenticated | tojson }};
 
-    // Función para abrir el modal del carrito desde los botones del catálogo
-    function abrirCarrito(nombreProducto) {
-        // Redirigir al login si no hay sesión activa
-        if (!usuarioAutenticado) {
-            window.location.href = "{{ url_for('login') }}";
-            return;
-        }
-
-        const inputNombre = document.getElementById('producto-nombre');
-        if (inputNombre) {
-            inputNombre.value = nombreProducto;
-        }
-
-        // Cerrar modales que estén abiertos actualmente
-        const modalesAbiertos = document.querySelectorAll('.modal.show');
-        modalesAbiertos.forEach(modal => {
-            const modalInstance = bootstrap.Modal.getInstance(modal);
-            if (modalInstance) modalInstance.hide();
-        });
-
-        // Abrir el modal de selección de cantidad/talla
-        const elModalCarrito = document.getElementById('modalCarrito');
-        if (elModalCarrito) {
-            const modalCarrito = new bootstrap.Modal(elModalCarrito);
-            modalCarrito.show();
-        }
-    }
+    
 
     // Función para confirmar la cantidad/talla y pasar al modal de envío
     function confirmarPedido() {
