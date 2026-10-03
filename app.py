@@ -367,7 +367,6 @@ def guardar_pedido():
 @app.route('/mis_pedidos')
 @login_required
 def mis_pedidos():
-    """Muestra los pedidos. Si es admin, muestra todos; si es cliente, muestra los suyos."""
     conn = None
     pedidos_usuario = []
     
@@ -375,36 +374,34 @@ def mis_pedidos():
         conn = obtener_conexion()
         cursor = conn.cursor()
         
-        # Verificar si el usuario actual es Administrador
-        es_admin = getattr(current_user, 'es_admin', False) or getattr(current_user, 'rol', '') == 'admin' or current_user.username == 'admin'
+        # Validar si es admin de forma segura
+        nombre_usuario = getattr(current_user, 'usuario', '')
+        es_admin = getattr(current_user, 'es_admin', False) or getattr(current_user, 'rol', '') == 'admin' or nombre_usuario == 'admin'
+        
+        # Seleccionar exactamente las 9 columnas que pide tu plantilla pedidos.html
+        query_base = '''
+            SELECT id, cliente, cedula, direccion, telefono, producto, cantidad, talla, fecha 
+            FROM pedidos 
+        '''
         
         if es_admin:
-            # El administrador ve TODOS los pedidos realizados en la tienda
-            cursor.execute('''
-                SELECT id, producto, cantidad, talla, direccion, telefono, fecha 
-                FROM pedidos 
-                ORDER BY id DESC
-            ''')
+            cursor.execute(query_base + 'ORDER BY id DESC')
         else:
-            # Un cliente normal ve únicamente sus pedidos
             usuario_id = getattr(current_user, 'id', None)
             cedula = getattr(current_user, 'cedula', '')
-            cursor.execute('''
-                SELECT id, producto, cantidad, talla, direccion, telefono, fecha 
-                FROM pedidos 
-                WHERE usuario_id = %s OR cedula = %s
-                ORDER BY id DESC
-            ''', (usuario_id, cedula))
+            cursor.execute(query_base + 'WHERE usuario_id = %s OR cedula = %s ORDER BY id DESC', (usuario_id, cedula))
             
         pedidos_usuario = cursor.fetchall()
         cursor.close()
     except Exception as e:
         print(f"Error en consulta de mis_pedidos: {e}")
+        pedidos_usuario = []
     finally:
         if conn:
             conn.close()
             
-    return render_template('mis_pedidos.html', pedidos=pedidos_usuario)
+    # Renderizamos pedidos.html (que es el nombre real de tu plantilla)
+    return render_template('pedidos.html', pedidos=pedidos_usuario)
 
 
 # ==========================================
