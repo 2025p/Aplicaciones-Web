@@ -138,6 +138,11 @@ def init_db():
                 fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         ''')
+        
+        
+        # --- AGREGAR ESTO PARA MIGRAR LA TABLA PEDIDOS ---
+        cursor.execute("ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS usuario_id INT;")
+        cursor.execute("ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS cedula VARCHAR(50);")
 
         conn.commit()
         cursor.close()
