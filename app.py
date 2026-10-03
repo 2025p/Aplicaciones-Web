@@ -362,19 +362,43 @@ def guardar_pedido():
 @app.route('/mis_pedidos')
 @login_required
 def mis_pedidos():
-    """Muestra los pedidos realizados por el usuario actual."""
-    conn = obtener_conexion()
-    cursor = conn.cursor()
-    cursor.execute('''
-        SELECT id, producto, cantidad, talla, direccion, telefono, fecha 
-        FROM pedidos 
-        WHERE usuario_id = %s OR cedula = %s 
-        ORDER BY id DESC
-    ''', (getattr(current_user, 'id', None), getattr(current_user, 'cedula', '')))
+    """Muestra los pedidos. Si es admin, muestra todos; si es cliente, muestra los suyos."""
+    conn = None
+    pedidos_usuario = []
     
-    pedidos_usuario = cursor.fetchall()
-    cursor.close()
-    conn.close()
+    try:
+        conn = obtener_conexion()
+        cursor = conn.cursor()
+        
+        # Verificar si el usuario actual es Administrador
+        es_admin = getattr(current_user, 'es_admin', False) or getattr(current_user, 'rol', '') == 'admin' or current_user.username == 'admin'
+        
+        if es_admin:
+            # El administrador ve TODOS los pedidos realizados en la tienda
+            cursor.execute('''
+                SELECT id, producto, cantidad, talla, direccion, telefono, fecha 
+                FROM pedidos 
+                ORDER BY id DESC
+            ''')
+        else:
+            # Un cliente normal ve únicamente sus pedidos
+            usuario_id = getattr(current_user, 'id', None)
+            cedula = getattr(current_user, 'cedula', '')
+            cursor.execute('''
+                SELECT id, producto, cantidad, talla, direccion, telefono, fecha 
+                FROM pedidos 
+                WHERE usuario_id = %s OR cedula = %s
+                ORDER BY id DESC
+            ''', (usuario_id, cedula))
+            
+        pedidos_usuario = cursor.fetchall()
+        cursor.close()
+    except Exception as e:
+        print(f"Error en consulta de mis_pedidos: {e}")
+    finally:
+        if conn:
+            conn.close()
+            
     return render_template('mis_pedidos.html', pedidos=pedidos_usuario)
 
 
