@@ -1,0 +1,27 @@
+[33m8d69898[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Fix: Agregar espacio antes de WHERE en consulta SQL de mis_pedidos
+[33m5f5d763[m Fix: Renderizar pedidos.html con las 9 columnas correctas
+[33m3b5be70[m Fix: Migracion de columnas en tabla pedidos
+[33mf3543ab[m Fix: Manejo de errores y vista admin en mis_pedidos
+[33m24b6c55[m Fix: Formato correcto de variable booleana Jinja a JS
+[33mc969b9d[m Fix: Agregar psycopg y psycopg2-binary a requirements
+[33m92fc0b3[m Sintaxis boton carrito
+[33m19cad44[m  Menu condicional por roles y validacion de sesion
+[33m26ea15b[m Fix database connection in conexion.py and requirements
+[33m3f91830[m Corregido orden de inicio e inicialización de db
+[33mbdb6a16[m Create database tables on startup
+[33m2856d01[m Fix database URI connection for Render deployment
+[33mf7e84cb[m Implementación de un sistema de login funcional con fondo elegante
+[33m8bf4478[m Conexcion con la base de datos PostgreSQL
+[33m75c2ca3[m Proyecto listo
+[33m18ce67a[m Corrigiendo enlace de script js para GitHub Pages
+[33mef45d06[m Eliminando index viejo de la rama main para limpiar
+[33mc06b290[m[33m ([m[1;31morigin/principal[m[33m)[m Eliminado index viejo y subiendo el actualizado a la raiz
+[33m888714e[m Catalogo con mas funcionalidades
+[33md6d1c4d[m estructura final semana5
+[33mb1cea13[m Estructura final de la semana 5
+[33mdf67bf0[m Remover pycache del repositorio remoto
+[33me679faf[m Ignorando pycache y actualizando index.html
+[33mcf1ebc2[m Segundo commit sistema de ventas
+[33mcaa6dcb[m Mi primer commit semantico de emprendimiento
+[33m4d6d897[m Actualizacion en Index.html
+[33mc27e2bd[m Primer commit: Sistema de compras de comida con Flask
